@@ -1,0 +1,50 @@
+{
+  "name": "craftx",
+  "version": "3.0.1",
+  "description": "Carefully craft JSON and async functions",
+  "main": "dist/index.js",
+  "files": [
+    "dist/index.js",
+    "dist/fn.js",
+    "dist/json.js"
+  ],
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  },
+  "devDependencies": {
+    "babel-minify": "^0.5.1",
+    "mocha": "^7.0.1",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "test": "mocha tests",
+    "tdd": "mocha tests --watch",
+    "build": "rimraf dist && mkdir dist && minify src -d dist",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "promise",
+    "async",
+    "resolved",
+    "util",
+    "utility",
+    "json",
+    "async-json"
+  ],
+  "engines": {
+    "node": ">= 14"
+  },
+  "author": "Amrayn Web Services <opensource@amrayn.com>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amrayn/craftx.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/amrayn/craftx/issues"
+  },
+  "homepage": "https://github.com/amrayn/craftx#readme"
+}
