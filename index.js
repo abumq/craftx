@@ -18,7 +18,7 @@
 // limitations under the License.
 
 const mypromise = (optOrFn, ...args) => {
-  let options = typeof optOrFn === 'object' ? optOrFn : {};
+  let options = {};
 
   const func = typeof optOrFn === 'function' ? optOrFn : args.length === 0 ? null : args[0];
 
@@ -33,15 +33,17 @@ const mypromise = (optOrFn, ...args) => {
     args.shift();
     // options may be overridden
     options = {
-      ...options,
+      ...(optOrFn || {}),
       ...(func.options || {}),
     };
   } else {
     // options may be overridden
     options = {
-      ...options,
       ...(optOrFn.options || {}),
     };
+  }
+  if (!options.name) {
+    options.name = func.name;
   }
   if (options.startTime) {
     options.startTime(options.name, options.description);
@@ -121,19 +123,22 @@ const final = (obj) => {
   return finalObj(obj);
 };
 
-const create = (optOrFn, fn) => {
+const mypromisify = (optOrFn, fn) => {
   if (typeof optOrFn === 'function') {
     const result = (...args) => mypromise(optOrFn, ...args);
     result.options = {};
     return result;
   }
   const result = (...args) => mypromise(optOrFn, fn, ...args);
-  result.options = optOrFn;
+  result.options = optOrFn || {};
   return result;
 };
 
-module.exports = mypromise;
-module.exports.mypromisify = create;
-module.exports.create = create;
+module.exports = mypromisify;
+module.exports.mypromisify = mypromisify;
 module.exports.final = final;
+
+// aliases
+module.exports.call = mypromise;
+module.exports.create = mypromisify;
 module.exports.wait = final;

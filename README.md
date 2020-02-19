@@ -56,8 +56,8 @@ because user was never passed in (and we could not have done it unless we separa
 ```javascript
 const mypromise = require('@amrayn/mypromise');
 
-const userInfo = mypromise(queryUserInfo);
-const accountInfo = mypromise(queryAccountInfo, userInfo);
+const userInfo = mypromise.call(queryUserInfo);
+const accountInfo = mypromise.call(queryAccountInfo, userInfo);
 ```
 
 Once you have everything in place, you will finally create an object or array with utility functions.
@@ -94,18 +94,17 @@ which is correctly resolved.
 You can pass option as first argument in both `mypromise()` and `mypromise.create`. If the first argument is object, the second must be the function.
 
 ```javascript
-const accountInfo = mypromise({debug: true}, queryAccountInfo, userInfo);
+const accountInfo = mypromise.call({debug: true}, queryAccountInfo, userInfo);
 
-// or with create / mypromisify
-const queryUserInfo_ = mypromise.create({debug: true}, queryUserInfo);
-const queryUserInfo_ = mypromise.mypromisify({debug: true}, queryUserInfo);
+// or with create function
+const queryUserInfo_ = mypromise({debug: true}, queryUserInfo);
 ```
 
 Following are the possible options
 
 | **Option** | **Description** |
 |--|--|
-| `name` | An identity for the function |
+| `name` | An identity for the function. Defaults to `<function>.name` |
 | `description` | A description for the function |
 | `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
@@ -119,8 +118,8 @@ The above is basic usage of the library. You can simplify the usage by creating 
 ```javascript
 const mypromise = require('@amrayn/mypromise');
 
-const queryUserInfo_ = mypromise.mypromisify(queryUserInfo);
-const queryAccountInfo_ = mypromise.mypromisify(queryAccountInfo);
+const queryUserInfo_ = mypromise(queryUserInfo);
+const queryAccountInfo_ = mypromise(queryAccountInfo);
 
 const userInfo = queryUserInfo_();
 const accountInfo = queryAccountInfo(userInfo);
@@ -129,9 +128,9 @@ const accountInfo = queryAccountInfo(userInfo);
 **This function is also called `create`** so you can do:
 
 ```javascript
-import mypromise from 'mypromise'; // or import { create } ...
+import mypromise from 'mypromise';
 
-const queryUserInfo = mypromise.create(queryUserInfo);
+const queryUserInfo = mypromise(queryUserInfo);
 ```
 
 #### Can I "mypromisify" all my functions?
@@ -140,11 +139,11 @@ Absolutely! The library is designed so all the functions can safely be "mypromis
 ```javascript
 const mypromise = require('mypromise');
 
-const myfn = mypromise.mypromisify(() => {
+const myfn = mypromise(() => {
   console.log('wifi')
 })
 
-const myfn2 = mypromise.mypromisify(async () => {
+const myfn2 = mypromise(async () => {
   console.log('wifi2')
 })
 
@@ -165,11 +164,11 @@ const myAwesomeFunc2 = () => {};
 const myAwesomeFunc3 = () => {};
 // ...
 
-export default mypromisify(myAwesomeFunc);
+export default mypromise(myAwesomeFunc);
 export {
-  myAwesomeFunc2: mypromisify(myAwesomeFunc2),
+  myAwesomeFunc2: mypromise(myAwesomeFunc2),
    // with options (options can be overriden at any time without need of importing the library)
-  myAwesomeFunc3: mypromisify({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
+  myAwesomeFunc3: mypromise({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
 }
 ```
 

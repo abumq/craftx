@@ -1,6 +1,6 @@
-import { create, final } from '../../';
+import mypromise, { final } from '../../';
 
-const myFunc = create(() => 123);
+const myFunc = mypromise(() => 123);
 
 const res = myFunc();
 
