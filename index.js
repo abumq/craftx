@@ -42,7 +42,7 @@ const mypromise = (optOrFn, ...args) => {
       ...(optOrFn.options || {}),
     };
   }
-  if (!options.name) {
+  if (!options.name && func.name !== '') {
     options.name = func.name;
   }
   if (options.startTime) {
@@ -124,13 +124,22 @@ const create = (obj) => {
 };
 
 const mypromisify = (optOrFn, fn) => {
+  let result;
   if (typeof optOrFn === 'function') {
-    const result = (...args) => mypromise(optOrFn, ...args);
+    result = (...args) => mypromise(optOrFn, ...args);
     result.options = {};
-    return result;
+  } else {
+    result = (...args) => mypromise(optOrFn, fn, ...args);
+    result.options = optOrFn || {};
   }
-  const result = (...args) => mypromise(optOrFn, fn, ...args);
-  result.options = optOrFn || {};
+  result.setOptions = (newOptions) => {
+    if (!newOptions) {
+      throw new Error(`${newOptions} is not an object`);
+    }
+    Object.keys(newOptions).forEach(currOptKey => {
+      result.options[currOptKey] = newOptions[currOptKey];
+    });
+  };
   return result;
 };
 
