@@ -114,8 +114,11 @@ Following are the possible options
 
 | **Option** | **Description** |
 |--|--|
-| `log` | Boolean value to tell mypromise whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
-| `id` | An identity for the function |
+| `name` | An identity for the function |
+| `description` | A description for the function |
+| `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
+| `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
+| `debug` | Boolean value to tell mypromise whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
 ## License
 ```

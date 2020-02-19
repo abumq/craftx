@@ -17,36 +17,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const mypromise = (fn, ...args) => {
-  const options = typeof fn === 'object' ? fn : {};
+const mypromise = (optOrFn, ...args) => {
+  const options = typeof optOrFn === 'object' ? optOrFn : {};
 
-  const func = typeof fn === 'function' ? fn : args.length === 0 ? null : args[0];
+  const func = typeof optOrFn === 'function' ? optOrFn : args.length === 0 ? null : args[0];
 
   if (typeof func !== 'function') {
     throw new Error(`${func} is not an object`);
   }
 
-  if (typeof fn === 'object') {
+  if (typeof optOrFn === 'object') {
     // we need shift args by one as first paramter is "options"
     // second is function
     // and rest are arguments
     args.shift();
   }
-
+  if (options.startTime) {
+    options.startTime(options.name, options.description);
+  }
   const argsAsPromises = args.map(curr => Promise.resolve(curr));
-  return Promise.all(argsAsPromises)
-  .then(async results => {
-    const finalResult = await Promise.resolve(func(...results));
-    if (options.debug) {
-      const _logger = global.logger || console;
-      try {
-        _logger.debug('Resolving %s: %s', options.id || '<unnamed>', JSON.stringify(finalResult, null, 2));
-      } catch (err) {
-        _logger.debug('Resolving %s: %s', options.id || '<unnamed>', finalResult);
+  return Promise.all(argsAsPromises).then(async results => {
+    try {
+      const finalResult = await Promise.resolve(func(...results));
+      if (options.debug) {
+        const _logger = global.logger || console;
+        try {
+          _logger.debug('Resolving %s: %s', options.name || '<unnamed>', JSON.stringify(finalResult, null, 2));
+        } catch (err) {
+          _logger.debug('Resolving %s: %s', options.name || '<unnamed>', finalResult);
+        }
+      }
+      return finalResult;
+    } finally {
+      if (options.endTime) {
+        endTime(options.name);
       }
     }
-    return finalResult;
   }).catch(error => {
+    if (options.endTime) {
+      endTime(options.name);
+    }
     if (error instanceof Error) {
       throw error;
     }
