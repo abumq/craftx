@@ -104,7 +104,7 @@ Following are the possible options
 
 | **Option** | **Description** |
 |--|--|
-| `name` | An identity for the function. Defaults to `<function>.name` |
+| `name` | An identity for the function. Defaults to `<function>.name` - **IT MUST NOT CONTAIN SPACE** |
 | `description` | A description for the function |
 | `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
