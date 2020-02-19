@@ -1,8 +1,8 @@
 const mypromise = require('../');
 const exampleUtils = require('./example-utils');
 
-const queryUserInfo = mypromise.create(exampleUtils.queryUserInfo);
-const queryAccountInfo = mypromise.create({ log: true, id: 'queryAccountInfo' }, exampleUtils.queryAccountInfo);
+const queryUserInfo = mypromise.mypromisify(exampleUtils.queryUserInfo);
+const queryAccountInfo = mypromise.mypromisify(exampleUtils.queryAccountInfo);
 
 const userInfo = queryUserInfo();
 const accountInfo = queryAccountInfo(userInfo);

@@ -18,7 +18,7 @@
 // limitations under the License.
 
 const mypromise = (optOrFn, ...args) => {
-  const options = typeof optOrFn === 'object' ? optOrFn : {};
+  let options = typeof optOrFn === 'object' ? optOrFn : {};
 
   const func = typeof optOrFn === 'function' ? optOrFn : args.length === 0 ? null : args[0];
 
@@ -31,6 +31,17 @@ const mypromise = (optOrFn, ...args) => {
     // second is function
     // and rest are arguments
     args.shift();
+    // options may be overridden
+    options = {
+      ...options,
+      ...(func.options || {}),
+    };
+  } else {
+    // options may be overridden
+    options = {
+      ...options,
+      ...(optOrFn.options || {}),
+    };
   }
   if (options.startTime) {
     options.startTime(options.name, options.description);
@@ -112,9 +123,13 @@ const final = (obj) => {
 
 const create = (optOrFn, fn) => {
   if (typeof optOrFn === 'function') {
-    return (...args) => mypromise(optOrFn, ...args);
+    const result = (...args) => mypromise(optOrFn, ...args);
+    result.options = {};
+    return result;
   }
-  return (...args) => mypromise(optOrFn, fn, ...args);
+  const result = (...args) => mypromise(optOrFn, fn, ...args);
+  result.options = optOrFn;
+  return result;
 };
 
 module.exports = mypromise;

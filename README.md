@@ -89,26 +89,6 @@ which is correctly resolved.
 **`final` is also called `wait` - you can use either one**
 
 ## Advanced
-### Create Functions
-The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
-
-```javascript
-const mypromise = require('@amrayn/mypromise');
-
-const queryUserInfo_ = mypromise.create(queryUserInfo);
-const queryAccountInfo_ = mypromise.create(queryAccountInfo);
-
-const userInfo = queryUserInfo_();
-const accountInfo = queryAccountInfo(userInfo);
-```
-
-**This function is also called `mypromisify`** so you can do:
-
-```javascript
-import { mypromisify } from 'mypromise';
-
-const queryUserInfo = mypromisify(queryUserInfo);
-```
 
 ### Options
 You can pass option as first argument in both `mypromise()` and `mypromise.create`. If the first argument is object, the second must be the function.
@@ -130,6 +110,94 @@ Following are the possible options
 | `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
 | `debug` | Boolean value to tell mypromise whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+
+**Note: Options can be override later after mypromisified version of function is created - see `/examples/override-options`**
+
+### "mypromisify" Functions
+The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
+
+```javascript
+const mypromise = require('@amrayn/mypromise');
+
+const queryUserInfo_ = mypromise.mypromisify(queryUserInfo);
+const queryAccountInfo_ = mypromise.mypromisify(queryAccountInfo);
+
+const userInfo = queryUserInfo_();
+const accountInfo = queryAccountInfo(userInfo);
+```
+
+**This function is also called `create`** so you can do:
+
+```javascript
+import mypromise from 'mypromise'; // or import { create } ...
+
+const queryUserInfo = mypromise.create(queryUserInfo);
+```
+
+#### Can I "mypromisify" all my functions?
+Absolutely! The library is designed so all the functions can safely be "mypromisified". This means you can create all your functions like:
+
+```javascript
+const mypromise = require('mypromise');
+
+const myfn = mypromise.mypromisify(() => {
+  console.log('wifi')
+})
+
+const myfn2 = mypromise.mypromisify(async () => {
+  console.log('wifi2')
+})
+
+new Promise(async (resolve) => {
+  myfn();
+  await myfn2() // you can await your promisified functions
+  resolve();
+})
+```
+
+You can even export all your functions like this:
+
+[this is pseudo-example and won't work as is]
+
+```javascript
+const myAwesomeFunc = () => {};
+const myAwesomeFunc2 = () => {};
+const myAwesomeFunc3 = () => {};
+// ...
+
+export default mypromisify(myAwesomeFunc);
+export {
+  myAwesomeFunc2: mypromisify(myAwesomeFunc2),
+   // with options (options can be overriden at any time without need of importing the library)
+  myAwesomeFunc3: mypromisify({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
+}
+```
+
+That way you don't have to re-import library where you are using the function.
+
+You can safely override the options, e.g,
+
+[this is pseudo-example and won't work as is]
+
+```javascript
+import { myAwesomeFunc2, myAwesomeFunc3 } from 'my-awesome-utils';
+
+export default (req, res, next) {
+  myAwesomeFunc2.options = {
+    // hint: server-timing
+    startTime: res.startTime,
+    endTime: res.endTime,
+  };
+
+  // this will keep the original name and override "debug" option
+  myAwesomeFunc3.options = {
+    debug: true,
+  };
+
+  myAwesomeFunc2();
+  myAwesomeFunc3();
+}
+```
 
 ## License
 ```
