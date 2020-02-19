@@ -118,5 +118,7 @@ const create = (optOrFn, fn) => {
 };
 
 module.exports = mypromise;
+module.exports.mypromisify = create;
 module.exports.create = create;
 module.exports.final = final;
+module.exports.wait = final;

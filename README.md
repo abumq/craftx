@@ -86,6 +86,8 @@ This will result in:
 
 which is correctly resolved.
 
+**`final` is also called `wait` - you can use either one**
+
 ## Advanced
 ### Create Functions
 The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
@@ -100,14 +102,23 @@ const userInfo = queryUserInfo_();
 const accountInfo = queryAccountInfo(userInfo);
 ```
 
+**This function is also called `mypromisify`** so you can do:
+
+```javascript
+import { mypromisify } from 'mypromise';
+
+const queryUserInfo = mypromisify(queryUserInfo);
+```
+
 ### Options
 You can pass option as first argument in both `mypromise()` and `mypromise.create`. If the first argument is object, the second must be the function.
 
 ```javascript
 const accountInfo = mypromise({debug: true}, queryAccountInfo, userInfo);
 
-// or with create
+// or with create / mypromisify
 const queryUserInfo_ = mypromise.create({debug: true}, queryUserInfo);
+const queryUserInfo_ = mypromise.mypromisify({debug: true}, queryUserInfo);
 ```
 
 Following are the possible options
