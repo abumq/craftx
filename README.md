@@ -54,7 +54,7 @@ because user was never passed in (and we could not have done it unless we separa
 `mypromise` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
 
 ```javascript
-const mypromise = require('mypromise');
+const mypromise = require('@amrayn/mypromise');
 
 const userInfo = mypromise(queryUserInfo);
 const accountInfo = mypromise(queryAccountInfo, userInfo);
