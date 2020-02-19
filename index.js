@@ -37,7 +37,7 @@ const mypromise = (fn, ...args) => {
   return Promise.all(argsAsPromises)
   .then(async results => {
     const finalResult = await Promise.resolve(func(...results));
-    if (options.log) {
+    if (options.debug) {
       const _logger = global.logger || console;
       try {
         _logger.debug('Resolving %s: %s', options.id || '<unnamed>', JSON.stringify(finalResult, null, 2));
@@ -98,6 +98,13 @@ mypromise.final = (obj) => {
     return mypromise.finalArr(obj);
   }
   return mypromise.finalObj(obj);
+};
+
+mypromise.create = (optOrFn, fn) => {
+  if (typeof optOrFn === 'function') {
+    return (...args) => mypromise(optOrFn, ...args);
+  }
+  return (...args) => mypromise(optOrFn, fn, ...args);
 };
 
 module.exports = mypromise;

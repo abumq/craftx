@@ -86,6 +86,37 @@ This will result in:
 
 which is correctly resolved.
 
+## Advanced
+### Create Functions
+The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
+
+```javascript
+const mypromise = require('@amrayn/mypromise');
+
+const queryUserInfo_ = mypromise.create(queryUserInfo);
+const queryAccountInfo_ = mypromise.create(queryAccountInfo);
+
+const userInfo = queryUserInfo_();
+const accountInfo = queryAccountInfo(userInfo);
+```
+
+### Options
+You can pass option as first argument in both `mypromise()` and `mypromise.create`. If the first argument is object, the second must be the function.
+
+```javascript
+const accountInfo = mypromise({debug: true}, queryAccountInfo, userInfo);
+
+// or with create
+const queryUserInfo_ = mypromise.create({debug: true}, queryUserInfo);
+```
+
+Following are the possible options
+
+| **Option** | **Description** |
+|--|--|
+| `log` | Boolean value to tell mypromise whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+| `id` | An identity for the function |
+
 ## License
 ```
 Copyright (c) 2020 Amrayn Web Services
