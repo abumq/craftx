@@ -54,7 +54,7 @@ const mypromise = (fn, ...args) => {
   });
 };
 
-mypromise.finalObj = (obj) => {
+const finalObj = (obj) => {
   if (typeof obj !== 'object') {
     throw new Error(`${obj} is not an object`);
   }
@@ -75,7 +75,7 @@ mypromise.finalObj = (obj) => {
   })
 };
 
-mypromise.finalArr = (arr) => {
+const finalArr = (arr) => {
   if (!Array.isArray(arr)) {
     throw new Error(`${arr} is not an array`);
   }
@@ -90,17 +90,17 @@ mypromise.finalArr = (arr) => {
   })
 };
 
-mypromise.final = (obj) => {
+const final = (obj) => {
   if (typeof obj !== 'object' && !Array.isArray(obj)) {
     throw new Error(`${obj} is not an object or array`);
   }
   if (Array.isArray(obj)) {
-    return mypromise.finalArr(obj);
+    return finalArr(obj);
   }
-  return mypromise.finalObj(obj);
+  return finalObj(obj);
 };
 
-mypromise.create = (optOrFn, fn) => {
+const create = (optOrFn, fn) => {
   if (typeof optOrFn === 'function') {
     return (...args) => mypromise(optOrFn, ...args);
   }
@@ -108,3 +108,5 @@ mypromise.create = (optOrFn, fn) => {
 };
 
 module.exports = mypromise;
+module.exports.create = create;
+module.exports.final = final;

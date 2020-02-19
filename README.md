@@ -12,7 +12,7 @@ yarn add @amrayn/mypromise
 ## Problem
 There are times when you want to use promise values once the promise is fulfilled. This library helps you achieve this goal using native promise mechanism.
 
-The following example shows you why this library is useful. We will walk you through the example and provide explanation where necessary. Please note, a runnable version of same example is available under `/example` directory.
+The following example shows you why this library is useful. We will walk you through the example and provide explanation where necessary. Please note, a runnable version of same example is available at `/examples/index.js`.
 
 Let's say you have various utility functions to query the database.
 
