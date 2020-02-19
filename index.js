@@ -20,7 +20,7 @@
 const mypromise = (optOrFn, ...args) => {
   let options = {};
 
-  const func = typeof optOrFn === 'function' ? optOrFn : args.length === 0 ? null : args[0];
+  const func = typeof optOrFn === 'function' ? optOrFn : args[0];
 
   if (typeof func !== 'function') {
     throw new Error(`${func} is not an object`);
