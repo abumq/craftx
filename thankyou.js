@@ -17,4 +17,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-console.log(`Thank you for using mypromise. Please consider donating: https://amrayn.com/donate`);
+console.log(`Thank you for using truepromise. Please consider donating: https://amrayn.com/donate`);

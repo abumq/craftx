@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const mypromise = (fn, ...args) => {
+const truepromise = (fn, ...args) => {
   const options = typeof fn === 'object' ? fn : {};
 
   const func = typeof fn === 'function' ? fn : args.length === 0 ? null : args[0];
@@ -54,7 +54,7 @@ const mypromise = (fn, ...args) => {
   });
 };
 
-mypromise.finalObj = (obj) => {
+truepromise.finalObj = (obj) => {
   if (typeof obj !== 'object') {
     throw new Error(`${obj} is not an object`);
   }
@@ -75,7 +75,7 @@ mypromise.finalObj = (obj) => {
   })
 };
 
-mypromise.finalArr = (arr) => {
+truepromise.finalArr = (arr) => {
   if (!Array.isArray(arr)) {
     throw new Error(`${arr} is not an array`);
   }
@@ -90,14 +90,14 @@ mypromise.finalArr = (arr) => {
   })
 };
 
-mypromise.final = (obj) => {
+truepromise.final = (obj) => {
   if (typeof obj !== 'object' && !Array.isArray(obj)) {
     throw new Error(`${obj} is not an object or array`);
   }
   if (Array.isArray(obj)) {
-    return mypromise.finalArr(obj);
+    return truepromise.finalArr(obj);
   }
-  return mypromise.finalObj(obj);
+  return truepromise.finalObj(obj);
 };
 
-module.exports = mypromise;
+module.exports = truepromise;
