@@ -77,7 +77,7 @@ const mypromise = (optOrFn, ...args) => {
   });
 };
 
-const finalObj = (obj) => {
+const createObject = (obj) => {
   if (typeof obj !== 'object') {
     throw new Error(`${obj} is not an object`);
   }
@@ -98,7 +98,7 @@ const finalObj = (obj) => {
   })
 };
 
-const finalArr = (arr) => {
+const createArray = (arr) => {
   if (!Array.isArray(arr)) {
     throw new Error(`${arr} is not an array`);
   }
@@ -113,14 +113,14 @@ const finalArr = (arr) => {
   })
 };
 
-const final = (obj) => {
+const create = (obj) => {
   if (typeof obj !== 'object' && !Array.isArray(obj)) {
     throw new Error(`${obj} is not an object or array`);
   }
   if (Array.isArray(obj)) {
-    return finalArr(obj);
+    return createArray(obj);
   }
-  return finalObj(obj);
+  return createObject(obj);
 };
 
 const mypromisify = (optOrFn, fn) => {
@@ -136,9 +136,9 @@ const mypromisify = (optOrFn, fn) => {
 
 module.exports = mypromisify;
 module.exports.mypromisify = mypromisify;
-module.exports.final = final;
+module.exports.create = create;
 
 // aliases
 module.exports.call = mypromise;
-module.exports.create = mypromisify;
-module.exports.wait = final;
+module.exports.final = create;
+module.exports.wait = create;

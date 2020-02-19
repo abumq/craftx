@@ -7,7 +7,7 @@ const queryAccountInfo = mypromise(exampleUtils.queryAccountInfo);
 const userInfo = queryUserInfo();
 const accountInfo = queryAccountInfo(userInfo);
 
-const finalResult = mypromise.final({
+const finalResult = mypromise.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {

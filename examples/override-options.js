@@ -26,7 +26,7 @@ new Promise(async (resolve) => {
   resolve();
 })
 
-mypromise.final({ // wait() is an alias of final
+mypromise.create({ // wait() and final() are aliases of create
   companyInfo,
   accountInfo,
 }).then(result => {

@@ -9,7 +9,7 @@ const generateObj = (err = false) => {
   const withErr = err ? mypromise.call(exampleUtils.thisFnThrows)
     .catch(err => console.log('This was thrown to show you how to catch errors', err.message)) : null;
 
-  return mypromise.final({
+  return mypromise.create({
     title: 'example',
     account: accountInfo,
     systemInfo,

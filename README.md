@@ -63,7 +63,7 @@ const accountInfo = mypromise.call(queryAccountInfo, userInfo);
 Once you have everything in place, you will finally create an object or array with utility functions.
 
 ```javascript
-const finalResult = mypromise.final({
+const finalResult = mypromise.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {
@@ -86,17 +86,17 @@ This will result in:
 
 which is correctly resolved.
 
-**`final` is also called `wait` - you can use either one**
+**`create` is also called `final` and `wait` - you can use either one**
 
 ## Advanced
 
 ### Options
-You can pass option as first argument in both `mypromise()` and `mypromise.create`. If the first argument is object, the second must be the function.
+You can pass option as first argument in both `mypromise()` and `mypromise.call()`. If the first argument is object, the second must be the function.
 
 ```javascript
 const accountInfo = mypromise.call({debug: true}, queryAccountInfo, userInfo);
 
-// or with create function
+// or with mypromisification function
 const queryUserInfo_ = mypromise({debug: true}, queryUserInfo);
 ```
 
@@ -123,14 +123,6 @@ const queryAccountInfo_ = mypromise(queryAccountInfo);
 
 const userInfo = queryUserInfo_();
 const accountInfo = queryAccountInfo(userInfo);
-```
-
-**This function is also called `create`** so you can do:
-
-```javascript
-import mypromise from 'mypromise';
-
-const queryUserInfo = mypromise(queryUserInfo);
 ```
 
 #### Can I "mypromisify" all my functions?
