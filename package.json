@@ -10,8 +10,12 @@
     "util",
     "utility"
   ],
+  "files": [
+    "thankyou.js",
+    "index.js"
+  ],
   "scripts": {
-    "postinstall": "node postinstall.js"
+    "postinstall": "node thankyou.js"
   },
   "engines": {
     "node": ">= 6"
