@@ -50,12 +50,12 @@ const mypromise = (optOrFn, ...args) => {
       return finalResult;
     } finally {
       if (options.endTime) {
-        endTime(options.name);
+        options.endTime(options.name);
       }
     }
   }).catch(error => {
     if (options.endTime) {
-      endTime(options.name);
+      options.endTime(options.name);
     }
     if (error instanceof Error) {
       throw error;
