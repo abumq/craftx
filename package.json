@@ -11,12 +11,8 @@
     "utility"
   ],
   "files": [
-    "thankyou.js",
     "index.js"
   ],
-  "scripts": {
-    "postinstall": "node thankyou.js"
-  },
   "engines": {
     "node": ">= 6"
   },
