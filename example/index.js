@@ -1,15 +1,15 @@
-const truepromise = require('../');
+const mypromise = require('../');
 const exampleUtils = require('./example-utils');
 
 const generateObj = (err = false) => {
-  const userInfo = truepromise(exampleUtils.queryUserInfo);
-  const accountInfo = truepromise(exampleUtils.queryAccountInfo, userInfo);
-  const systemInfo = truepromise(exampleUtils.querySystemInfo);
-  const config = truepromise(exampleUtils.queryConfig, 'web');
-  const withErr = err ? truepromise(exampleUtils.thisFnThrows)
+  const userInfo = mypromise(exampleUtils.queryUserInfo);
+  const accountInfo = mypromise(exampleUtils.queryAccountInfo, userInfo);
+  const systemInfo = mypromise(exampleUtils.querySystemInfo);
+  const config = mypromise(exampleUtils.queryConfig, 'web');
+  const withErr = err ? mypromise(exampleUtils.thisFnThrows)
     .catch(err => console.log('This was thrown to show you how to catch errors', err.message)) : null;
 
-  return truepromise.final({
+  return mypromise.final({
     title: 'example',
     account: accountInfo,
     systemInfo,

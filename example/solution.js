@@ -1,10 +1,10 @@
-const truepromise = require('../');
+const mypromise = require('../');
 const exampleUtils = require('./example-utils');
 
-const userInfo = truepromise(exampleUtils.queryUserInfo);
-const accountInfo = truepromise(exampleUtils.queryAccountInfo, userInfo);
+const userInfo = mypromise(exampleUtils.queryUserInfo);
+const accountInfo = mypromise(exampleUtils.queryAccountInfo, userInfo);
 
-const finalResult = truepromise.final({
+const finalResult = mypromise.final({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {

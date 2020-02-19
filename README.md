@@ -1,8 +1,8 @@
-# truepromise
+# mypromise
 Use promise once it is satisfied otherwise wait for the promise
 
 ```
-yarn add truepromise
+yarn add @amrayn/mypromise
 ```
 
 <br>
@@ -51,19 +51,19 @@ This will result in:
 because user was never passed in (and we could not have done it unless we separated it out in to a separate promise call)
 
 ## Solution
-`truepromise` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
+`mypromise` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
 
 ```javascript
-const truepromise = require('truepromise');
+const mypromise = require('mypromise');
 
-const userInfo = truepromise(queryUserInfo);
-const accountInfo = truepromise(queryAccountInfo, userInfo);
+const userInfo = mypromise(queryUserInfo);
+const accountInfo = mypromise(queryAccountInfo, userInfo);
 ```
 
 Once you have everything in place, you will finally create an object or array with utility functions.
 
 ```javascript
-const finalResult = truepromise.final({
+const finalResult = mypromise.final({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {
