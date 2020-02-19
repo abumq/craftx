@@ -184,15 +184,14 @@ import { myAwesomeFunc2, myAwesomeFunc3 } from 'my-awesome-utils';
 
 export default (req, res, next) {
   myAwesomeFunc2.options = {
+    ...myAwesomeFunc2.options, // it is safe to do this!
     // hint: server-timing
     startTime: res.startTime,
     endTime: res.endTime,
   };
 
   // this will keep the original name and override "debug" option
-  myAwesomeFunc3.options = {
-    debug: true,
-  };
+  myAwesomeFunc3.options.debug = true;
 
   myAwesomeFunc2();
   myAwesomeFunc3();
