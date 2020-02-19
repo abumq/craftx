@@ -3,12 +3,25 @@
   "version": "1.0.0",
   "description": "Use promise values when they are satisfied otherwise wait for it",
   "main": "index.js",
+  "keywords": [
+    "promise",
+    "async",
+    "resolved",
+    "util",
+    "utility"
+  ],
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "author": "Amrayn Web Services <opensource@amrayn.com>",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amrayn/mypromise.git"
   },
-  "author": "Amrayn Web Services",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/amrayn/encr/issues"
   },
