@@ -1,5 +1,5 @@
 const assert = require('assert');
-const fn = require('../');
+const fn = require('../src');
 
 const queryUsername = async (title = '') => `${title}majid`;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));

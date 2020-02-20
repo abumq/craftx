@@ -7,13 +7,14 @@
     "dist/index.js"
   ],
   "devDependencies": {
+    "babel-minify": "^0.5.1",
     "mocha": "^7.0.1",
-    "rimraf": "^3.0.2",
-    "uglify-js": "^3.8.0"
+    "rimraf": "^3.0.2"
   },
   "scripts": {
     "test": "mocha tests",
-    "build": "rimraf dist && uglifyjs index.js "
+    "build": "rimraf dist && mkdir dist && minify src -d dist",
+    "prepublish": "echo \"Make sure you have run 'yarn build'\""
   },
   "keywords": [
     "promise",

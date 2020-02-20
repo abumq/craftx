@@ -1,4 +1,4 @@
-const mypromise = require('../');
+const mypromise = require('../src');
 const exampleUtils = require('./example-utils');
 
 const generateObj = (err = false) => {

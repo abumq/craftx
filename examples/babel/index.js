@@ -1,4 +1,4 @@
-import mypromise, { create as createFinalObj } from '../../';
+import mypromise, { create as createFinalObj } from '../../src';
 
 const myFunc = mypromise(() => 123);
 
