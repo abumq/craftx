@@ -11,15 +11,15 @@ Use promise once it is satisfied otherwise wait for the promise
   <a aria-label="License" href="https://github.com/zeit/next.js/blob/canary/license.md">
     <img alt="" src="https://img.shields.io/npm/l/@amrayn/mypromise?style=for-the-badge&labelColor=000000">
   </a>
+
+  <a aria-label="Donate via PayPal" href="https://amrayn.com/donate">
+    <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=PayPal&color=purple&style=for-the-badge&labelColor=000000">
+  </a>
 </p>
 
 ```
 yarn add @amrayn/mypromise
 ```
-
-<br>
-
-[![Donate](https://amrayn.github.io/donate.png?v2)](https://amrayn.com/donate)
 
 ## Problem
 There are times when you want to use promise values once the promise is fulfilled. This library helps you achieve this goal using native promise mechanism.
