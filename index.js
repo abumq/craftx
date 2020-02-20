@@ -146,6 +146,8 @@ const mypromisify = (optOrFn, fn) => {
 module.exports = mypromisify;
 module.exports.mypromisify = mypromisify;
 module.exports.create = create;
+module.exports.createObj = createObject;
+module.exports.createArr = createArray;
 
 // aliases
 module.exports.call = mypromise;

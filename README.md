@@ -88,6 +88,8 @@ which is correctly resolved.
 
 **`create` is also called `final` and `wait` - you can use either one**
 
+You can also use `createObj` or `createArr` instead of `create` but you must provide object/array respectively. `create()` automatically checks for the provided type.
+
 ## Advanced
 
 ### Options
