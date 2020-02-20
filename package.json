@@ -14,7 +14,7 @@
   "scripts": {
     "test": "mocha tests",
     "build": "rimraf dist && mkdir dist && minify src -d dist",
-    "prepublish": "echo \"Assuming you had run 'yarn build'\""
+    "prepublish": "yarn build"
   },
   "keywords": [
     "promise",
