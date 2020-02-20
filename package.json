@@ -24,7 +24,7 @@
     "utility"
   ],
   "engines": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "author": "Amrayn Web Services <opensource@amrayn.com>",
   "license": "Apache-2.0",
