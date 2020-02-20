@@ -2,16 +2,25 @@
   "name": "@amrayn/mypromise",
   "version": "1.1.5",
   "description": "Use promise values when they are satisfied otherwise wait for it",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "files": [
+    "dist/index.js"
+  ],
+  "devDependencies": {
+    "mocha": "^7.0.1",
+    "rimraf": "^3.0.2",
+    "uglify-js": "^3.8.0"
+  },
+  "scripts": {
+    "test": "mocha tests",
+    "build": "rimraf dist && uglifyjs index.js "
+  },
   "keywords": [
     "promise",
     "async",
     "resolved",
     "util",
     "utility"
-  ],
-  "files": [
-    "index.js"
   ],
   "engines": {
     "node": ">= 6"

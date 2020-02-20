@@ -123,15 +123,10 @@ const create = (obj) => {
   return createObject(obj);
 };
 
-const mypromisify = (optOrFn, fn) => {
-  let result;
-  if (typeof optOrFn === 'function') {
-    result = (...args) => mypromise(optOrFn, ...args);
-    result.options = {};
-  } else {
-    result = (...args) => mypromise(optOrFn, fn, ...args);
-    result.options = optOrFn || {};
-  }
+// wrapper is inner and always accept opt and fn
+const mypromisifyWrapper = (opt, fn) => {
+  const result = (...args) => mypromise(opt, fn, ...args);
+  result.options = opt || {};
   result.setOptions = (newOptions) => {
     if (!newOptions) {
       throw new Error(`${newOptions} is not an object`);
@@ -141,6 +136,13 @@ const mypromisify = (optOrFn, fn) => {
     });
   };
   return result;
+}
+
+const mypromisify = (optOrFn, fn) => {
+  if (typeof optOrFn === 'function') {
+    return mypromisifyWrapper({}, optOrFn);
+  }
+  return mypromisifyWrapper(optOrFn, fn);
 };
 
 module.exports = mypromisify;
