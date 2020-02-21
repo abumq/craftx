@@ -65,16 +65,16 @@ because user was never passed in (and we could not have done it unless we separa
 `makefun` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
 
 ```javascript
-const makefun = require('makefun');
+const fn = require('makefun');
 
-const userInfo = makefun.call(queryUserInfo);
-const accountInfo = makefun.call(queryAccountInfo, userInfo);
+const userInfo = fn.call(queryUserInfo);
+const accountInfo = fn.call(queryAccountInfo, userInfo);
 ```
 
 Once you have everything in place, you will finally create an object or array with utility functions.
 
 ```javascript
-const finalResult = makefun.create({
+const finalResult = fn.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {
@@ -104,13 +104,13 @@ You can also use `createObj` or `createArr` instead of `create` but you must pro
 ## Advanced
 
 ### Options
-You can pass option as first argument in both `makefun()` and `makefun.call()`. If the first argument is object, the second must be the function.
+You can pass option as first argument in both `fn()` and `fn.call()`. If the first argument is object, the second must be the function.
 
 ```javascript
-const accountInfo = makefun.call({debug: true}, queryAccountInfo, userInfo);
+const accountInfo = fn.call({debug: true}, queryAccountInfo, userInfo);
 
 // or
-const queryUserInfo_ = makefun({debug: true}, queryUserInfo);
+const queryUserInfo_ = fn({debug: true}, queryUserInfo);
 ```
 
 Following are the possible options
@@ -129,10 +129,10 @@ Following are the possible options
 The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
 
 ```javascript
-const makefun = require('makefun');
+const fn = require('makefun');
 
-const queryUserInfo_ = makefun(queryUserInfo);
-const queryAccountInfo_ = makefun(queryAccountInfo);
+const queryUserInfo_ = fn(queryUserInfo);
+const queryAccountInfo_ = fn(queryAccountInfo);
 
 const userInfo = queryUserInfo_();
 const accountInfo = queryAccountInfo(userInfo);
@@ -142,13 +142,13 @@ const accountInfo = queryAccountInfo(userInfo);
 Absolutely! As the name of library suggests, it is designed so all the functions can safely be turned in to this. This means you can create all your functions like:
 
 ```javascript
-const makefun = require('makefun');
+const fn = require('makefun');
 
-const myfn = makefun(() => {
+const myfn = fn(() => {
   console.log('wifi')
 })
 
-const myfn2 = makefun(async () => {
+const myfn2 = fn(async () => {
   console.log('wifi2')
 })
 
