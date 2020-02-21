@@ -1,13 +1,13 @@
-const makefun = require('../src');
+const fn = require('../src');
 const exampleUtils = require('./example-utils');
 
-const queryUserInfo = makefun(exampleUtils.queryUserInfo);
-const queryAccountInfo = makefun(exampleUtils.queryAccountInfo);
+const queryUserInfo = fn(exampleUtils.queryUserInfo);
+const queryAccountInfo = fn(exampleUtils.queryAccountInfo);
 
 const userInfo = queryUserInfo();
 const accountInfo = queryAccountInfo(userInfo);
 
-const finalResult = makefun.create({
+const finalResult = fn.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {

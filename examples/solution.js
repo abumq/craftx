@@ -1,10 +1,10 @@
-const makefun = require('../src');
+const fn = require('../src');
 const exampleUtils = require('./example-utils');
 
-const userInfo = makefun.call(exampleUtils.queryUserInfo);
-const accountInfo = makefun.call(exampleUtils.queryAccountInfo, userInfo);
+const userInfo = fn.call(exampleUtils.queryUserInfo);
+const accountInfo = fn.call(exampleUtils.queryAccountInfo, userInfo);
 
-const finalResult = makefun.create({
+const finalResult = fn.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {

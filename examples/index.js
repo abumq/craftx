@@ -1,15 +1,15 @@
-const makefun = require('../src');
+const fn = require('../src');
 const exampleUtils = require('./example-utils');
 
 const generateObj = (err = false) => {
-  const userInfo = makefun.call(exampleUtils.queryUserInfo);
-  const accountInfo = makefun.call(exampleUtils.queryAccountInfo, userInfo);
-  const systemInfo = makefun.call(exampleUtils.querySystemInfo);
-  const config = makefun.call(exampleUtils.queryConfig, 'web');
-  const withErr = err ? makefun.call(exampleUtils.thisFnThrows)
+  const userInfo = fn.call(exampleUtils.queryUserInfo);
+  const accountInfo = fn.call(exampleUtils.queryAccountInfo, userInfo);
+  const systemInfo = fn.call(exampleUtils.querySystemInfo);
+  const config = fn.call(exampleUtils.queryConfig, 'web');
+  const withErr = err ? fn.call(exampleUtils.thisFnThrows)
     .catch(err => console.log('This was thrown to show you how to catch errors', err.message)) : null;
 
-  return makefun.create({
+  return fn.create({
     title: 'example',
     account: accountInfo,
     systemInfo,
