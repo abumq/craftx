@@ -2,7 +2,11 @@
     <a href="https://github.com/amrayn/makefun">
       <img width="190px" src="https://github.com/amrayn/makefun/raw/master/assets/logo.png" />
     </a>
-    <h4 align="center">Use promise values when they are satisfied without awaiting</h4>
+    <p align="center">Use promise values when they are satisfied without awaiting</p>
+</p>
+
+<p align="center">
+    •   •   •
 </p>
 
 <p align="center">
