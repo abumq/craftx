@@ -27,7 +27,7 @@
 ## Installation
 
 ```bash
-npm install redis
+npm i makefun -S
 ```
 
 ```bash
