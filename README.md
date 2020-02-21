@@ -1,5 +1,9 @@
-# 🤝 makefun
-Use promise values when they are satisfied without awaiting
+<p align="center">
+    <a href="https://github.com/amrayn/makefun">
+      <img width="190px" src="https://github.com/amrayn/makefun/raw/master/assets/logo.png" />
+    </a>
+    <h4 align="center">Use promise values when they are satisfied without awaiting</h4>
+</p>
 
 <p align="center">
   <a aria-label="Build Status" href="https://travis-ci.org/amrayn/makefun">
@@ -16,7 +20,15 @@ Use promise values when they are satisfied without awaiting
   </a>
 </p>
 
+---
+
+## Installation
+
+```bash
+npm install redis
 ```
+
+```bash
 yarn add makefun
 ```
 
