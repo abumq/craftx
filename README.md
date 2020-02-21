@@ -1,5 +1,5 @@
-# makefun
-Use promise values as they are satisfied otherwise wait for the promise
+# 🤝 makefun
+Use promise values when they are satisfied without awaiting
 
 <p align="center">
   <a aria-label="Build Status" href="https://travis-ci.org/amrayn/makefun">

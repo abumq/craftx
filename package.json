@@ -1,7 +1,7 @@
 {
   "name": "makefun",
   "version": "1.1.14",
-  "description": "Use promise values when they are satisfied otherwise wait for it",
+  "description": "Use promise values when they are satisfied without awaiting",
   "main": "dist/index.js",
   "files": [
     "dist/index.js"
