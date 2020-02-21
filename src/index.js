@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const mypromise = (optOrFn, ...args) => {
+const makefun = (optOrFn, ...args) => {
   let options = {};
 
   const func = typeof optOrFn === 'function' ? optOrFn : args[0];
@@ -124,8 +124,8 @@ const create = (obj) => {
 };
 
 // wrapper is inner and always accept opt and fn
-const mypromisifyWrapper = (opt, fn) => {
-  const result = (...args) => mypromise(opt, fn, ...args);
+const toFunWrapper = (opt, fn) => {
+  const result = (...args) => makefun(opt, fn, ...args);
   result.options = opt || {};
   result.setOptions = (newOptions) => {
     if (!newOptions) {
@@ -138,20 +138,20 @@ const mypromisifyWrapper = (opt, fn) => {
   return result;
 }
 
-const mypromisify = (optOrFn, fn) => {
+const toFun = (optOrFn, fn) => {
   if (typeof optOrFn === 'function') {
-    return mypromisifyWrapper({}, optOrFn);
+    return toFunWrapper({}, optOrFn);
   }
-  return mypromisifyWrapper(optOrFn, fn);
+  return toFunWrapper(optOrFn, fn);
 };
 
-module.exports = mypromisify;
-module.exports.mypromisify = mypromisify;
+module.exports = toFun;
+module.exports.toFun = toFun;
 module.exports.create = create;
 module.exports.createObj = createObject;
 module.exports.createArr = createArray;
 
 // aliases
-module.exports.call = mypromise;
+module.exports.call = makefun;
 module.exports.final = create;
 module.exports.wait = create;

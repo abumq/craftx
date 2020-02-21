@@ -1,13 +1,13 @@
-const mypromise = require('../src');
+const makefun = require('../src');
 const exampleUtils = require('./example-utils');
 
-const queryUserInfo = mypromise(exampleUtils.queryUserInfo);
-const queryAccountInfo = mypromise(exampleUtils.queryAccountInfo);
+const queryUserInfo = makefun(exampleUtils.queryUserInfo);
+const queryAccountInfo = makefun(exampleUtils.queryAccountInfo);
 
 const userInfo = queryUserInfo();
 const accountInfo = queryAccountInfo(userInfo);
 
-const finalResult = mypromise.create({
+const finalResult = makefun.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {

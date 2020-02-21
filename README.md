@@ -1,15 +1,15 @@
-# mypromise
-Use promise once it is satisfied otherwise wait for the promise
+# makefun
+Use promise values as they are satisfied otherwise wait for the promise
 
 <p align="center">
-  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/mypromise">
-    <img alt="" src="https://img.shields.io/travis/amrayn/mypromise/master.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/makefun">
+    <img alt="" src="https://img.shields.io/travis/amrayn/makefun/master.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/@amrayn/mypromise">
-    <img alt="" src="https://img.shields.io/npm/v/@amrayn/mypromise.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/@amrayn/makefun">
+    <img alt="" src="https://img.shields.io/npm/v/@amrayn/makefun.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="License" href="https://github.com/amrayn/mypromise/blob/master/LICENSE">
-    <img alt="" src="https://img.shields.io/npm/l/@amrayn/mypromise?style=for-the-badge&labelColor=000000">
+  <a aria-label="License" href="https://github.com/amrayn/makefun/blob/master/LICENSE">
+    <img alt="" src="https://img.shields.io/npm/l/@amrayn/makefun?style=for-the-badge&labelColor=000000">
   </a>
 
   <a aria-label="Donate via PayPal" href="https://amrayn.com/donate">
@@ -18,7 +18,7 @@ Use promise once it is satisfied otherwise wait for the promise
 </p>
 
 ```
-yarn add @amrayn/mypromise
+yarn add makefun
 ```
 
 ## Problem
@@ -63,19 +63,19 @@ This will result in:
 because user was never passed in (and we could not have done it unless we separated it out in to a separate promise call)
 
 ## Solution
-`mypromise` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
+`makefun` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
 
 ```javascript
-const mypromise = require('@amrayn/mypromise');
+const makefun = require('makefun');
 
-const userInfo = mypromise.call(queryUserInfo);
-const accountInfo = mypromise.call(queryAccountInfo, userInfo);
+const userInfo = makefun.call(queryUserInfo);
+const accountInfo = makefun.call(queryAccountInfo, userInfo);
 ```
 
 Once you have everything in place, you will finally create an object or array with utility functions.
 
 ```javascript
-const finalResult = mypromise.create({
+const finalResult = makefun.create({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {
@@ -105,13 +105,13 @@ You can also use `createObj` or `createArr` instead of `create` but you must pro
 ## Advanced
 
 ### Options
-You can pass option as first argument in both `mypromise()` and `mypromise.call()`. If the first argument is object, the second must be the function.
+You can pass option as first argument in both `makefun()` and `makefun.call()`. If the first argument is object, the second must be the function.
 
 ```javascript
-const accountInfo = mypromise.call({debug: true}, queryAccountInfo, userInfo);
+const accountInfo = makefun.call({debug: true}, queryAccountInfo, userInfo);
 
-// or with mypromisification function
-const queryUserInfo_ = mypromise({debug: true}, queryUserInfo);
+// or
+const queryUserInfo_ = makefun({debug: true}, queryUserInfo);
 ```
 
 Following are the possible options
@@ -122,40 +122,40 @@ Following are the possible options
 | `description` | A description for the function |
 | `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
-| `debug` | Boolean value to tell mypromise whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+| `debug` | Boolean value to tell makefun whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
 **Note: Options can be override later after mypromisified version of function is created - see `/examples/override-options`**
 
-### "mypromisify" Functions
+### Create Functions
 The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
 
 ```javascript
-const mypromise = require('@amrayn/mypromise');
+const makefun = require('makefun');
 
-const queryUserInfo_ = mypromise(queryUserInfo);
-const queryAccountInfo_ = mypromise(queryAccountInfo);
+const queryUserInfo_ = makefun(queryUserInfo);
+const queryAccountInfo_ = makefun(queryAccountInfo);
 
 const userInfo = queryUserInfo_();
 const accountInfo = queryAccountInfo(userInfo);
 ```
 
-#### Can I "mypromisify" all my functions?
-Absolutely! The library is designed so all the functions can safely be "mypromisified". This means you can create all your functions like:
+#### Can I do this to all my functions?
+Absolutely! As the name of library suggests, it is designed so all the functions can safely be turned in to this. This means you can create all your functions like:
 
 ```javascript
-const mypromise = require('mypromise');
+const makefun = require('makefun');
 
-const myfn = mypromise(() => {
+const myfn = makefun(() => {
   console.log('wifi')
 })
 
-const myfn2 = mypromise(async () => {
+const myfn2 = makefun(async () => {
   console.log('wifi2')
 })
 
 new Promise(async (resolve) => {
   myfn();
-  await myfn2() // you can await your promisified functions
+  await myfn2() // you can await your functions
   resolve();
 })
 ```
@@ -170,11 +170,11 @@ const myAwesomeFunc2 = () => {};
 const myAwesomeFunc3 = () => {};
 // ...
 
-export default mypromise(myAwesomeFunc);
+export default makefun(myAwesomeFunc);
 export {
-  myAwesomeFunc2: mypromise(myAwesomeFunc2),
+  myAwesomeFunc2: makefun(myAwesomeFunc2),
    // with options (options can be overriden at any time without need of importing the library)
-  myAwesomeFunc3: mypromise({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
+  myAwesomeFunc3: makefun({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
 }
 ```
 

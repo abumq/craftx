@@ -1,6 +1,6 @@
-import mypromise, { create as createFinalObj } from '../../src';
+import makefun, { create as createFinalObj } from '../../src';
 
-const myFunc = mypromise(() => 123);
+const myFunc = makefun(() => 123);
 
 const res = myFunc();
 
