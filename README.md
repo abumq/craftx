@@ -5,13 +5,12 @@ Use promise values as they are satisfied otherwise wait for the promise
   <a aria-label="Build Status" href="https://travis-ci.org/amrayn/makefun">
     <img alt="" src="https://img.shields.io/travis/amrayn/makefun/master.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/@amrayn/makefun">
-    <img alt="" src="https://img.shields.io/npm/v/@amrayn/makefun.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/makefun">
+    <img alt="" src="https://img.shields.io/npm/v/makefun.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a aria-label="License" href="https://github.com/amrayn/makefun/blob/master/LICENSE">
-    <img alt="" src="https://img.shields.io/npm/l/@amrayn/makefun?style=for-the-badge&labelColor=000000">
+    <img alt="" src="https://img.shields.io/npm/l/makefun?style=for-the-badge&labelColor=000000">
   </a>
-
   <a aria-label="Donate via PayPal" href="https://amrayn.com/donate">
     <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=PayPal&color=purple&style=for-the-badge&labelColor=000000">
   </a>
