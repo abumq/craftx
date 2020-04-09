@@ -5,6 +5,7 @@ install:
 - npm install
 script:
 - npm run test
+before_deploy: "npm install --save-dev && npm run build"
 deploy:
   provider: npm
   email: opensource@amrayn.com
