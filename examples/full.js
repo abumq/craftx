@@ -34,6 +34,27 @@ const buildProps = () => {
 }
 
 (async () => {
-  const result = await buildProps();
+  // note buildProps is a promise
+  const props = buildProps();
+  
+  // and data is also returning promise
+  const data = Promise.resolve(123);
+
+  const result = await fn.final({
+    props,
+    data
+  });
+  
+  // the result is following (with only one await!):
+  //
+  // {
+  //   props: {
+  //     bio: { id: 1, name: 'John' },
+  //     details: { profile: 'His name is John (1)' },
+  //     company: { name: 'Amrayn Web Services', department: 'IT' }
+  //   },
+  //   data: 123
+  // }
+  
   console.log(result);
 })();
