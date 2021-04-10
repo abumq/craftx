@@ -42,30 +42,48 @@ yarn add makefun
 ```javascript
 const fn = require('makefun');
 
-const queryPerson = () => Promise.resolve({
+//
+// If we have bunch of promise based functions
+//
+const queryPerson_ = () => Promise.resolve({
   id: 1,
   name: 'John',
 });
 
-const queryDetails = (person) => Promise.resolve({
+const queryDetails_ = (person) => Promise.resolve({
   profile: 'His name is ' + person.name + ' (' + person.id + ')',
 });
 
-const queryCompany = () => Promise.resolve({
+const queryCompany_ = () => Promise.resolve({
   name: 'Amrayn Web Services',
   department: 'IT',
 });
+/////////////////////////////////////////////////////////
 
-const queryPerson2 = fn(queryPerson);
-const queryDetails2 = fn(queryDetails);
 
+//
+// We makefun of them
+//
+const queryPerson = fn(queryPerson_);
+const queryDetails = fn(queryDetails_);
+// We do not need to makefun this function
+// as we do not require any promise based parameter
+// but we'll just do it to keep the consistency
+const queryCompany = fn(queryCompany_);
+
+
+/////////////////////////////////////////////////////////
+
+
+// We have a function that is going to call various promise based
+// functions and some require the return values of others
 const buildProps = () => {
 
   // Note how we are not using any await
   // meaning it's querying everything in parrallel
   // and returned with single await
-  const person = queryPerson2();
-  const details = queryDetails2(person);
+  const person = queryPerson();
+  const details = queryDetails(person);
   const company = queryCompany();
 
   return fn.create({
@@ -74,6 +92,12 @@ const buildProps = () => {
     company,
   });
 }
+
+
+
+/////////////////////////////////////////////////////////
+
+
 
 (async () => {
   // note buildProps is a promise
