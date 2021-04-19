@@ -88,11 +88,25 @@ async function resolveDeepObject(obj, depth, currentKey) {
   }
 
   if (typeof obj === 'object') {
-    const result = {};
-    for (const k in obj) {
-      result[k] = await resolveDeepObject(obj[k], depth + 1, k)
-    }
-    return result;
+    const keys = Object.keys(obj);
+
+    return Promise.all(
+      keys.map(key =>
+        resolveDeepObject(obj[key], depth + 1, key)
+      )
+    )
+    .then(values =>
+      keys.reduce((accum, key, idx) => ({
+        ...accum,
+        [key]: values[idx],
+      }), {})
+    )
+    .catch(error => {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(error);
+    })
   }
 
   return obj;
@@ -102,30 +116,14 @@ const createObject = (obj) => {
   if (typeof obj !== 'object') {
     throw new Error(`${obj} is not an object`);
   }
-  const keys = Object.keys(obj);
-  const valuesAsPromises = keys.map(key => resolveDeepObject(obj[key], 1, key));
-  return Promise.all(valuesAsPromises)
-  .then(values => {
-    const result = {};
-    keys.forEach((key, index) => {
-      result[key] = values[index];
-    });
-    return result;
-  }).catch(error => {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(error);
-  })
+  return resolveDeepObject(obj, 1, '<root>');
 };
 
 const createArray = (arr) => {
   if (!Array.isArray(arr)) {
     throw new Error(`${arr} is not an array`);
   }
-  const elemsAsPromises = arr.map(curr => Promise.resolve(curr));
-  return Promise.all(elemsAsPromises)
-  .then(values => values)
+  return Promise.all(arr.map(curr => Promise.resolve(curr)))
   .catch(error => {
     if (error instanceof Error) {
       throw error;

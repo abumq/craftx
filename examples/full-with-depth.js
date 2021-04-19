@@ -1,8 +1,10 @@
-const fn = require('makefun');
+const fn = require('../src');
 
 //
 // If we have bunch of promise based functions
 //
+
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const buildPerson_ = (details) => Promise.resolve(details);
 
@@ -14,15 +16,23 @@ const queryPerson_ = () => buildPerson_({
   weight: 70,
 });
 
-const queryDetails_ = (person) => Promise.resolve({
-  description: `His name is ${person.name} (${person.id})`,
-  ageDescription: `Age is ${person.age}`,
-});
+const queryDetails_ = async (person) => {
+//  await snooze(3000)
 
-const queryProfile_ = (person) => Promise.resolve({
-  height: `This person is ${person.height} cm tall`,
-  weight: `This person is ${person.weight} kg in weight`,
-});
+  return {
+    description: `His name is ${person.name} (${person.id})`,
+    ageDescription: `Age is ${person.age}`,
+  }
+};
+
+const queryProfile_ = async (person) => {
+//  await snooze(2000)
+
+  return {
+    height: `This person is ${person.height} cm tall`,
+    weight: `This person is ${person.weight} kg in weight`,
+  }
+};
 
 const queryCompany_ = () => Promise.resolve({
   name: 'Amrayn Web Services',
@@ -173,4 +183,3 @@ const buildPeopleList = () => {
 
   console.log(JSON.stringify(result, null, 2))
 })();
-
