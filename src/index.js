@@ -1,9 +1,7 @@
-// Copyright (c) 2020 Amrayn Web Services
-// Copyright (c) 2020 @abumusamq
+// Copyright (c) 2020-present Amrayn Web Services
 //
 // https://github.com/amrayn/
 // https://amrayn.com
-// https://humble.js.org
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +14,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+const MAX_DEPTH = 64;
 
 const makefun = (optOrFn, ...args) => {
   let options = {};
@@ -77,12 +77,33 @@ const makefun = (optOrFn, ...args) => {
   });
 };
 
+async function resolveDeepObject(obj, depth, currentKey) {
+  if (typeof obj === 'object' && typeof obj.then === 'function') {
+    // is promise
+    return Promise.resolve(obj)
+  }
+
+  if (depth === MAX_DEPTH) {
+    throw new Error(`Exhausted depth supported by makefun ${depth} at ${currentKey}`);
+  }
+
+  if (typeof obj === 'object') {
+    const result = {};
+    for (const k in obj) {
+      result[k] = await resolveDeepObject(obj[k], depth + 1, k)
+    }
+    return result;
+  }
+
+  return obj;
+}
+
 const createObject = (obj) => {
   if (typeof obj !== 'object') {
     throw new Error(`${obj} is not an object`);
   }
   const keys = Object.keys(obj);
-  const valuesAsPromises = keys.map(key => Promise.resolve(obj[key]));
+  const valuesAsPromises = keys.map(key => resolveDeepObject(obj[key], 1, key));
   return Promise.all(valuesAsPromises)
   .then(values => {
     const result = {};
@@ -155,3 +176,4 @@ module.exports.createArr = createArray;
 module.exports.call = makefun;
 module.exports.final = create;
 module.exports.wait = create;
+module.exports.json = create;

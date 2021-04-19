@@ -102,7 +102,7 @@ const buildProps = () => {
 (async () => {
   // note buildProps is a promise
   const props = buildProps();
-  
+
   // and data is also returning promise
   const data = Promise.resolve(123);
 
@@ -110,7 +110,7 @@ const buildProps = () => {
     props,
     data
   });
-  
+
   // the result is following (with only one await!):
   //
   // {
@@ -121,10 +121,12 @@ const buildProps = () => {
   //   },
   //   data: 123
   // }
-  
+
   console.log(result);
 })();
 ```
+
+There are other examples available [here](https://github.com/amrayn/makefun/tree/master/examples) and this example and it's variant can be found [here](https://github.com/amrayn/makefun/blob/master/examples/full.js) and [here](https://github.com/amrayn/makefun/blob/master/examples/full-with-depth.js) respectively.
 
 ## Problem
 There are times when you want to use promise values once the promise is fulfilled. This library helps you achieve this goal using native promise mechanism.
@@ -134,8 +136,8 @@ The following example shows you why this library is useful. We will walk you thr
 Let's say you have various utility functions to query the database.
 
 ```javascript
-const queryUserInfo = async () => ({
-  username: '@abumusamq'
+const queryCompanyInfo = async () => ({
+  username: '@amrayn'
 });
 
 const queryAccountInfo = async (user) => ({
@@ -195,7 +197,7 @@ This will result in:
 ```javascript
 {
   user: {
-    username: '@abumusamq'
+    username: '@amrayn'
   },
   created: '19-02-2020'
 }
@@ -203,49 +205,28 @@ This will result in:
 
 which is correctly resolved.
 
-**`create` is also called `final` and `wait` - you can use either one**
 
-You can also use `createObj` or `createArr` instead of `create` but you must provide object/array respectively. `create()` automatically checks for the provided type.
+> **`create` is also called `final()`, `wait()` and `json()` - you can use either one of these**
+
+>You can also use `createObj` or `createArr` instead of `create` but you must provide object/array respectively. `create()` automatically checks for the provided type.
 
 ## Advanced
 
-### Options
-You can pass option as first argument in both `fn()` and `fn.call()`. If the first argument is object, the second must be the function.
-
-```javascript
-const accountInfo = fn.call({debug: true}, queryAccountInfo, userInfo);
-
-// or
-const queryUserInfo_ = fn({debug: true}, queryUserInfo);
-```
-
-Following are the possible options
-
-| **Option** | **Description** |
-|--|--|
-| `name` | An identity for the function. Defaults to `<function>.name` - **IT MUST NOT CONTAIN SPACE** |
-| `description` | A description for the function |
-| `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
-| `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
-| `debug` | Boolean value to tell makefun whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
-
-**Note: Options can be override later after mypromisified version of function is created - see `/examples/override-options`**
-
 ### Create Functions
-The above is basic usage of the library. You can simplify the usage by creating a "mypromisified" function. It is extremely easy to do that.
+The above is basic usage of the library. You can simplify the usage by creating such function and make them more readable. It is extremely easy to do that.
 
 ```javascript
 const fn = require('makefun');
 
-const queryUserInfo_ = fn(queryUserInfo);
+const queryUserInfo_ = fn(queryUserInfo); // DONE!
 const queryAccountInfo_ = fn(queryAccountInfo);
 
 const userInfo = queryUserInfo_();
 const accountInfo = queryAccountInfo(userInfo);
 ```
 
-#### Can I do this to all my functions?
-Absolutely! As the name of library suggests, it is designed so all the functions can safely be turned in to this. This means you can create all your functions like:
+#### FAQ: Can I do this to all my functions?
+makefun library was designed to turn all your existing functions to this. This means you can create all your functions like:
 
 ```javascript
 const fn = require('makefun');
@@ -258,11 +239,12 @@ const myfn2 = fn(async () => {
   console.log('wifi2')
 })
 
-new Promise(async (resolve) => {
+(async (resolve) => {
   myfn();
   await myfn2() // you can await your functions
-  resolve();
-})
+
+  // and much more
+})()
 ```
 
 You can even export all your functions like this:
@@ -305,16 +287,39 @@ export default (req, res, next) {
   myAwesomeFunc2();
   myAwesomeFunc3();
 }
+
 ```
+### Options
+You can pass option as first argument in both `fn()` and `fn.call()`. If the first argument is object, the second must be the function.
+
+```javascript
+const accountInfo = fn.call({debug: true}, queryAccountInfo, userInfo);
+
+// or
+const queryUserInfo_ = fn({debug: true}, queryUserInfo);
+```
+
+Following are the possible options
+
+| **Option** | **Description** |
+|--|--|
+| `name` | An identity for the function. Defaults to `<function>.name` - **IT MUST NOT CONTAIN SPACE** |
+| `description` | A description for the function |
+| `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
+| `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
+| `debug` | Boolean value to tell makefun whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+
+**Note: Options can be override later after mypromisified version of function is created - see `/examples/override-options`**
+
+#### Max depth
+Default object depth supported by makefun is 64.
 
 ## License
 ```
-Copyright (c) 2020 Amrayn Web Services
-Copyright (c) 2020 @abumusamq
+Copyright (c) 2020-present Amrayn Web Services
 
 https://github.com/amrayn/
 https://amrayn.com
-https://humble.js.org
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
