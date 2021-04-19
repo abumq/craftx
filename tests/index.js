@@ -1,13 +1,13 @@
 const assert = require('assert');
 const fn = require('../src');
 
-const queryUsername = async (title = '') => `${title}majid`;
+const queryUsername = async (title = '') => `${title}john`;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Using call()', () => {
   describe('without parameter', () => {
     it('without parameter should return correct result', async () => {
-      assert.equal(await fn.call(queryUsername), 'majid');
+      assert.equal(await fn.call(queryUsername), 'john');
     });
 
     it('without parameter timer works', async () => {
@@ -18,7 +18,7 @@ describe('Using call()', () => {
         endTime: () => timerResult.end = true,
       }, queryUsername);
 
-      assert.equal(name, 'majid');
+      assert.equal(name, 'john');
       assert.equal(timerResult.start, true);
       assert.equal(timerResult.end, true);
     });
@@ -26,7 +26,7 @@ describe('Using call()', () => {
 
   describe('with parameter', () => {
     it('with parameter should return correct result', async () => {
-      assert.equal(await fn.call(queryUsername, 'mr. '), 'mr. majid');
+      assert.equal(await fn.call(queryUsername, 'mr. '), 'mr. john');
     });
 
     it('with parameter timer works', async () => {
@@ -37,7 +37,7 @@ describe('Using call()', () => {
         endTime: () => timerResult.end = true,
       }, queryUsername, 'mr. ');
 
-      assert.equal(name, 'mr. majid');
+      assert.equal(name, 'mr. john');
       assert.equal(timerResult.start, true);
       assert.equal(timerResult.end, true);
     });
@@ -46,7 +46,7 @@ describe('Using call()', () => {
       const queryTitle = async () => 'Mr. ';
 
       const userTitle = queryTitle();
-      assert.equal(await fn.call(queryUsername, userTitle), 'Mr. majid');
+      assert.equal(await fn.call(queryUsername, userTitle), 'Mr. john');
     });
   });
 });
@@ -63,7 +63,7 @@ describe('Using mypromise()', () => {
 
   describe('without parameter', () => {
     it('without parameter should return correct result', async () => {
-      assert.equal(await newQueryUsername(), 'majid');
+      assert.equal(await newQueryUsername(), 'john');
     });
 
     it('without parameter timer works with present options', async () => {
@@ -76,7 +76,7 @@ describe('Using mypromise()', () => {
 
       const name = await newQueryUsername();
 
-      assert.equal(name, 'majid');
+      assert.equal(name, 'john');
       assert.equal(timerResult.start, true);
       assert.equal(timerResult.end, true);
     });
@@ -93,7 +93,7 @@ describe('Using mypromise()', () => {
 
       const name = await rawQueryUsername();
 
-      assert.equal(name, 'majid');
+      assert.equal(name, 'john');
       assert.equal(timerResult.start, true);
       assert.equal(timerResult.end, true);
     });
@@ -101,7 +101,7 @@ describe('Using mypromise()', () => {
 
   describe('with parameter', () => {
     it('with parameter should return correct result', async () => {
-      assert.equal(await newQueryUsername('mr. '), 'mr. majid');
+      assert.equal(await newQueryUsername('mr. '), 'mr. john');
     });
 
     it('with parameter timer works', async () => {
@@ -112,7 +112,7 @@ describe('Using mypromise()', () => {
         endTime: () => timerResult.end = true,
       }, queryUsername, 'mr. ');
 
-      assert.equal(name, 'mr. majid');
+      assert.equal(name, 'mr. john');
       assert.equal(timerResult.start, true);
       assert.equal(timerResult.end, true);
     });
@@ -121,7 +121,7 @@ describe('Using mypromise()', () => {
       const queryTitle = async () => 'Mr. ';
 
       const userTitle = queryTitle();
-      assert.equal(await fn.call(queryUsername, userTitle), 'Mr. majid');
+      assert.equal(await fn.call(queryUsername, userTitle), 'Mr. john');
     });
   });
 });
