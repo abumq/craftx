@@ -83,6 +83,11 @@ async function resolveDeepObject(obj, depth, currentKey) {
     return Promise.resolve(obj)
   }
 
+  if (Array.isArray(obj)) {
+    // is array
+    return Promise.resolve(obj)
+  }
+
   if (depth === MAX_DEPTH) {
     throw new Error(`Exhausted depth supported by makefun ${depth} at ${currentKey}`);
   }
@@ -108,7 +113,6 @@ async function resolveDeepObject(obj, depth, currentKey) {
       throw new Error(error);
     })
   }
-
   return obj;
 }
 
