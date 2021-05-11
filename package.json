@@ -27,19 +27,19 @@
     "async-json"
   ],
   "engines": {
-    "node": ">= 8"
+    "node": ">= 14"
   },
   "author": "Amrayn Web Services <opensource@amrayn.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amrayn/craftjson.git"
+    "url": "git+https://github.com/amrayn/craftx.git"
   },
   "publishConfig": {
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/amrayn/craftjson/issues"
+    "url": "https://github.com/amrayn/craftx/issues"
   },
-  "homepage": "https://github.com/amrayn/craftjson#readme"
+  "homepage": "https://github.com/amrayn/craftx#readme"
 }

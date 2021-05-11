@@ -1,19 +1,19 @@
 <p align="center">
-    <a href="https://github.com/amrayn/craftjson">
-      <img width="190px" src="https://github.com/amrayn/craftjson/raw/master/assets/logo.png?" />
+    <a href="https://github.com/amrayn/craftx">
+      <img width="190px" src="https://github.com/amrayn/craftx/raw/master/assets/logo.png?" />
     </a>
     <p align="center">Carefully craft JSON and async functions</p>
 </p>
 
 <p align="center">
-  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/craftjson">
-    <img alt="" src="https://img.shields.io/travis/amrayn/craftjson/master.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/craftx">
+    <img alt="" src="https://img.shields.io/travis/amrayn/craftx/master.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/craftjson">
-    <img alt="" src="https://img.shields.io/npm/v/craftjson.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/craftx">
+    <img alt="" src="https://img.shields.io/npm/v/craftx.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="License" href="https://github.com/amrayn/craftjson/blob/master/LICENSE">
-    <img alt="" src="https://img.shields.io/npm/l/craftjson?style=for-the-badge&labelColor=000000">
+  <a aria-label="License" href="https://github.com/amrayn/craftx/blob/master/LICENSE">
+    <img alt="" src="https://img.shields.io/npm/l/craftx?style=for-the-badge&labelColor=000000">
   </a>
   <a aria-label="Donate" href="https://amrayn.com/donate">
     <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=Web&color=purple&style=for-the-badge&labelColor=000000">
@@ -77,7 +77,7 @@ the calls are now sequential and defeats the purpose of [non-blocking event base
 To handle this situation without wrapping the promise resolution in a separate function, you can use this utility package to handle this situation
 
 ```javascript
-const craftx = require('craftjson');
+const craftx = require('craftx');
 
 await craftx.json({
   id: 1,
@@ -97,7 +97,7 @@ This will resolve only after all the promises are resolved. Resulting in:
 ```
 
 #### Max depth
-Default object depth supported by craftjson is 64.
+Default object depth supported by craftx is 64.
 
 ### 2. Craft a Function
 
@@ -165,6 +165,36 @@ This will result in:
 }
 ```
 
+#### Bulk Export
+Converting existing exports to crafted functions is easy, either using `fn` for each function which can be cumbersome depending on number of functions; or you can simply convert the whole object using a helper function `fnExport`.
+
+Let's say you have:
+
+```javascript
+const function1 = () => {}
+const function2 = () => {}
+
+module.exports = {
+  function1,
+  function2,
+}
+```
+Just use `fnExport` when exporting
+
+```javascript
+const { fnExport } = require('craftx');
+
+const function1 = () => {}
+const function2 = () => {}
+
+module.exports = fnExport({
+  function1,
+  function2,
+})
+```
+
+Alternatively, you can do it when importing like in example of `/examples/json.js`. Doing it multiple times does not harm.
+
 #### Options
 If the first parameter is an object for the `fn()`, that object is used for setting up the options.
 
@@ -195,7 +225,7 @@ Following are the possible options
 | `description` | A description for the function |
 | `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
-| `debug` | Boolean value to tell craftjson whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+| `debug` | Boolean value to tell craftx whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
 
 ## License
