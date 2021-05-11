@@ -1,6 +1,6 @@
 // Copyright (c) 2020-present Amrayn Web Services
 //
-// https://github.com/amrayn/
+// https://github.com/amrayn/craftx
 // https://amrayn.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,15 @@
 // limitations under the License.
 
 const { fn, exec, fnExport } = require('./fn');
-const json = require('./json');
+const { json } = require('./json');
 
+// default export
 module.exports = fn;
 
+// name exports from fn
 module.exports.fn = fn;
 module.exports.fnExport = fnExport;
 module.exports.exec = exec;
 
+// name exports from json
 module.exports.json = json;

@@ -1,3 +1,7 @@
+## 2.0.3
+- Updates to `setOptions` and added test coverage for it
+- Fix error when function is of incorrect type
+
 ## 2.0.2
 - Changed default export to `fn()`
 - Added `fnExport` helper function

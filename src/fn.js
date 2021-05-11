@@ -1,6 +1,6 @@
 // Copyright (c) 2020-present Amrayn Web Services
 //
-// https://github.com/amrayn/
+// https://github.com/amrayn/craftx
 // https://amrayn.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ const exec = (optOrFn, ...args) => {
   const func = typeof optOrFn === 'function' ? optOrFn : args[0];
 
   if (typeof func !== 'function') {
-    throw new Error(`${func} is not an object`);
+    throw new Error(`${func} is not a function`);
   }
 
   if (typeof optOrFn === 'object') {
@@ -32,12 +32,12 @@ const exec = (optOrFn, ...args) => {
     // options may be overridden
     options = {
       ...(optOrFn || {}),
-      ...(func.options || {}),
+      ...(func._craftxOptions || {}),
     };
   } else {
     // options may be overridden
     options = {
-      ...(optOrFn.options || {}),
+      ...(optOrFn._craftxOptions || {}),
     };
   }
   if (!options.name && func.name !== '') {
@@ -53,9 +53,9 @@ const exec = (optOrFn, ...args) => {
       if (options.debug) {
         const _logger = global.logger || console;
         try {
-          _logger.debug('Resolving %s: %s', options.name || '<unnamed>', JSON.stringify(finalResult, null, 2));
+          _logger.debug('craftx: Resolving %s: %s', options.name || '<unnamed>', JSON.stringify(finalResult, null, 2));
         } catch (err) {
-          _logger.debug('Resolving %s: %s', options.name || '<unnamed>', finalResult);
+          _logger.debug('craftx: Resolving %s: %s', options.name || '<unnamed>', finalResult);
         }
       }
       return finalResult;
@@ -79,13 +79,17 @@ const exec = (optOrFn, ...args) => {
 const toFunWrapper = (opt, fn) => {
   const result = (...args) => exec(opt, fn, ...args);
   result._isCraftx = true;
-  result.options = opt || {};
+  result._craftxOptions = opt || {};
   result.setOptions = (newOptions) => {
-    if (!newOptions) {
+    if (!newOptions || typeof newOptions !== 'object') {
       throw new Error(`${newOptions} is not an object`);
     }
+
+    // Note:
+    // do not use reduce here as we want to modify the
+    // object in previously initiated memory
     Object.keys(newOptions).forEach(currOptKey => {
-      result.options[currOptKey] = newOptions[currOptKey];
+      result._craftxOptions[currOptKey] = newOptions[currOptKey];
     });
   };
   return result;

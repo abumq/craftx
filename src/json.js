@@ -1,6 +1,6 @@
 // Copyright (c) 2020-present Amrayn Web Services
 //
-// https://github.com/amrayn/
+// https://github.com/amrayn/craftx
 // https://amrayn.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,7 +55,7 @@ const isArrayType = o => o && !!ARRAY_TYPES[o.constructor.name];
 
 const createArray = (arr, depth, currentKey) => {
   if (depth === MAX_DEPTH) {
-    throw new Error(`Exceeded array depth supported by craftjson ${depth} at ${currentKey}`);
+    throw new Error(`Exceeded array depth supported by craftx ${depth} at ${currentKey}`);
   }
 
   if (!arr) {
@@ -73,7 +73,7 @@ const createArray = (arr, depth, currentKey) => {
       return createArray(curr, depth + 1, currentKey);
     }
 
-    return create(curr);
+    return json(curr);
   })))
   .catch(error => {
     if (error instanceof Error) {
@@ -86,7 +86,7 @@ const createArray = (arr, depth, currentKey) => {
 const createObject = (obj, depth, currentKey) => {
 
   if (depth === MAX_DEPTH) {
-    throw new Error(`Exceeded object depth supported by craftjson ${depth} at ${currentKey}`);
+    throw new Error(`Exceeded object depth supported by craftx ${depth} at ${currentKey}`);
   }
 
   if (!obj) {
@@ -130,7 +130,7 @@ const createObject = (obj, depth, currentKey) => {
   return obj;
 }
 
-function create(val) {
+function json(val) {
   if (!val || val === null || typeof val !== 'object') {
     return val;
   }
@@ -142,5 +142,4 @@ function create(val) {
   return createObject(val, 1, '<root>');
 };
 
-
-module.exports = create;
+module.exports.json = json;
