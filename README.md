@@ -1,8 +1,8 @@
 <p align="center">
-    <a href="https://github.com/amrayn/makefun">
-      <img width="190px" src="https://github.com/amrayn/makefun/raw/master/assets/logo.png" />
+    <a href="https://github.com/amrayn/craftjson">
+      <img width="190px" src="https://github.com/amrayn/craftjson/raw/master/assets/logo.png" />
     </a>
-    <p align="center">Use promise values when they are satisfied without awaiting</p>
+    <p align="center">Carefully craft JSON resolving all the promises</p>
 </p>
 
 <p align="center">
@@ -10,14 +10,14 @@
 </p>
 
 <p align="center">
-  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/makefun">
-    <img alt="" src="https://img.shields.io/travis/amrayn/makefun/master.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/craftjson">
+    <img alt="" src="https://img.shields.io/travis/amrayn/craftjson/master.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/makefun">
-    <img alt="" src="https://img.shields.io/npm/v/makefun.svg?style=for-the-badge&labelColor=000000">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/craftjson">
+    <img alt="" src="https://img.shields.io/npm/v/craftjson.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="License" href="https://github.com/amrayn/makefun/blob/master/LICENSE">
-    <img alt="" src="https://img.shields.io/npm/l/makefun?style=for-the-badge&labelColor=000000">
+  <a aria-label="License" href="https://github.com/amrayn/craftjson/blob/master/LICENSE">
+    <img alt="" src="https://img.shields.io/npm/l/craftjson?style=for-the-badge&labelColor=000000">
   </a>
   <a aria-label="Donate via PayPal" href="https://amrayn.com/donate">
     <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=PayPal&color=purple&style=for-the-badge&labelColor=000000">
@@ -31,16 +31,16 @@
 ## Installation
 
 ```bash
-npm i makefun -S
+npm i craftjson -S
 ```
 
 ```bash
-yarn add makefun
+yarn add craftjson
 ```
 
 ## Get to the point!
 ```javascript
-const fn = require('makefun');
+const fn = require('craftjson');
 
 //
 // If we have bunch of promise based functions
@@ -62,11 +62,11 @@ const queryCompany_ = () => Promise.resolve({
 
 
 //
-// We makefun of them
+// We craftjson of them
 //
 const queryPerson = fn(queryPerson_);
 const queryDetails = fn(queryDetails_);
-// We do not need to makefun this function
+// We do not need to craftjson this function
 // as we do not require any promise based parameter
 // but we'll just do it to keep the consistency
 const queryCompany = fn(queryCompany_);
@@ -126,7 +126,7 @@ const buildProps = () => {
 })();
 ```
 
-There are other examples available [here](https://github.com/amrayn/makefun/tree/master/examples) and this example and it's variant can be found [here](https://github.com/amrayn/makefun/blob/master/examples/full.js) and [here](https://github.com/amrayn/makefun/blob/master/examples/full-with-depth.js) respectively.
+There are other examples available [here](https://github.com/amrayn/craftjson/tree/master/examples) and this example and it's variant can be found [here](https://github.com/amrayn/craftjson/blob/master/examples/full.js) and [here](https://github.com/amrayn/craftjson/blob/master/examples/full-with-depth.js) respectively.
 
 ## Problem
 There are times when you want to use promise values once the promise is fulfilled. This library helps you achieve this goal using native promise mechanism.
@@ -170,19 +170,19 @@ This will result in:
 because user was never passed in (and we could not have done it unless we separated it out in to a separate promise call)
 
 ## Solution
-`makefun` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
+`craftjson` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
 
 ```javascript
-const fn = require('makefun');
+const fn = require('craftjson');
 
-const userInfo = fn.call(queryUserInfo);
-const accountInfo = fn.call(queryAccountInfo, userInfo);
+const userInfo = fn.exec(queryUserInfo);
+const accountInfo = fn.exec(queryAccountInfo, userInfo);
 ```
 
 Once you have everything in place, you will finally create an object or array with utility functions.
 
 ```javascript
-const finalResult = fn.create({
+const finalResult = fn.json({
   userInfo,
   accountInfo,
 }).then(({ userInfo, accountInfo }) => {
@@ -205,18 +205,13 @@ This will result in:
 
 which is correctly resolved.
 
-
-> **`create` is also called `final()`, `wait()` and `json()` - you can use either one of these**
-
->You can also use `createObj` or `createArr` instead of `create` but you must provide object/array respectively. `create()` automatically checks for the provided type.
-
 ## Advanced
 
 ### Create Functions
 The above is basic usage of the library. You can simplify the usage by creating such function and make them more readable. It is extremely easy to do that.
 
 ```javascript
-const fn = require('makefun');
+const fn = require('craftjson');
 
 const queryUserInfo_ = fn(queryUserInfo); // DONE!
 const queryAccountInfo_ = fn(queryAccountInfo);
@@ -226,10 +221,10 @@ const accountInfo = queryAccountInfo(userInfo);
 ```
 
 #### FAQ: Can I do this to all my functions?
-makefun library was designed to turn all your existing functions to this. This means you can create all your functions like:
+craftjson library was designed to turn all your existing functions to this. This means you can create all your functions like:
 
 ```javascript
-const fn = require('makefun');
+const fn = require('craftjson');
 
 const myfn = fn(() => {
   console.log('wifi')
@@ -257,11 +252,11 @@ const myAwesomeFunc2 = () => {};
 const myAwesomeFunc3 = () => {};
 // ...
 
-export default makefun(myAwesomeFunc);
+export default craftjson(myAwesomeFunc);
 export {
-  myAwesomeFunc2: makefun(myAwesomeFunc2),
+  myAwesomeFunc2: craftjson(myAwesomeFunc2),
    // with options (options can be overriden at any time without need of importing the library)
-  myAwesomeFunc3: makefun({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
+  myAwesomeFunc3: craftjson({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
 }
 ```
 
@@ -290,10 +285,10 @@ export default (req, res, next) {
 
 ```
 ### Options
-You can pass option as first argument in both `fn()` and `fn.call()`. If the first argument is object, the second must be the function.
+You can pass option as first argument in both `fn()` and `fn.exec()`. If the first argument is object, the second must be the function.
 
 ```javascript
-const accountInfo = fn.call({debug: true}, queryAccountInfo, userInfo);
+const accountInfo = fn.exec({debug: true}, queryAccountInfo, userInfo);
 
 // or
 const queryUserInfo_ = fn({debug: true}, queryUserInfo);
@@ -307,12 +302,12 @@ Following are the possible options
 | `description` | A description for the function |
 | `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
-| `debug` | Boolean value to tell makefun whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+| `debug` | Boolean value to tell craftjson whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
 **Note: Options can be override later after mypromisified version of function is created - see `/examples/override-options`**
 
 #### Max depth
-Default object depth supported by makefun is 64.
+Default object depth supported by craftjson is 64.
 
 ## License
 ```

@@ -17,6 +17,34 @@
 
 const MAX_DEPTH = 64;
 
+const ARRAY_TYPES = {
+  'Array': Array,
+  // TypedArray - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
+  'Int8Array': Int8Array,
+  'Uint8Array': Uint8Array,
+  'Uint8ClampedArray': Uint8ClampedArray,
+  'Int16Array': Int16Array,
+  'Uint16Array': Uint16Array,
+  'Int32Array': Int32Array,
+  'Uint32Array': Uint32Array,
+  'Float32Array': Float32Array,
+  'Float64Array': Float64Array,
+  'BigInt64Array': BigInt64Array,
+  'BigUint64Array': BigUint64Array,
+};
+
+const TYPED_ARRAY_NAMES = Object.keys(ARRAY_TYPES);
+
+// List of items that do not require
+// any further resolution and must be returned
+// as is.
+const NO_RESOLUTION_CLASS_LIST = [
+  'Date', 'Set', 'Map',
+
+  'ArrayBuffer', 'SharedArrayBuffer',
+  ...TYPED_ARRAY_NAMES,
+];
+
 const makefun = (optOrFn, ...args) => {
   let options = {};
 
@@ -77,19 +105,69 @@ const makefun = (optOrFn, ...args) => {
   });
 };
 
-async function resolveDeepObject(obj, depth, currentKey) {
-  if (typeof obj === 'object' && typeof obj.then === 'function') {
-    // is promise
-    return Promise.resolve(obj)
+// if [].from() is available use that otherwise use constructor
+const createArrInstance = (ArrayInstanceType, items) =>
+  typeof ArrayInstanceType.from === 'function' ?
+    ArrayInstanceType.from(items) : new ArrayInstanceType(...items);
+
+// do not use Array.isArray as it won't resolve typed arrays
+const isArrayType = o => o && !!ARRAY_TYPES[o.constructor.name];
+
+const createArray = (arr, depth, currentKey) => {
+  if (depth === MAX_DEPTH) {
+    throw new Error(`Exceeded array depth supported by makefun ${depth} at ${currentKey}`);
   }
 
-  if (Array.isArray(obj)) {
-    // is array
-    return Promise.resolve(obj)
+  if (!arr) {
+    return Promise.resolve(arr);
   }
+
+  const ArrayInstanceType = ARRAY_TYPES[arr.constructor.name] || Array;
+
+  // Something to note here
+  // Promise.all resolves it to Array instead of typed array
+  // so we do not have a way to resolve correct array type at
+  // top level
+  return Promise.all(createArrInstance(ArrayInstanceType, arr.map(curr => {
+    if (isArrayType(curr)) {
+      return createArray(curr, depth + 1, currentKey);
+    }
+
+    console.log(typeof curr)
+
+    return create(curr);
+  })))
+  .catch(error => {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(error);
+  })
+};
+
+const createObject = (obj, depth, currentKey) => {
 
   if (depth === MAX_DEPTH) {
-    throw new Error(`Exhausted depth supported by makefun ${depth} at ${currentKey}`);
+    throw new Error(`Exceeded object depth supported by makefun ${depth} at ${currentKey}`);
+  }
+
+  if (!obj) {
+    return Promise.resolve(obj);
+  }
+
+  if (typeof obj === 'object' && typeof obj.then === 'function') {
+    // inside promise
+    return Promise.resolve(obj)
+  }
+
+  if (obj.constructor) {
+    const constructorName = obj.constructor.name;
+    if (NO_RESOLUTION_CLASS_LIST.some(f => f === constructorName)) {
+      if (TYPED_ARRAY_NAMES.some(f => f === constructorName)) {
+        return createArray(obj, 1, currentKey);
+      }
+      return obj;
+    }
   }
 
   if (typeof obj === 'object') {
@@ -97,7 +175,7 @@ async function resolveDeepObject(obj, depth, currentKey) {
 
     return Promise.all(
       keys.map(key =>
-        resolveDeepObject(obj[key], depth + 1, key)
+        createObject(obj[key], depth + 1, key)
       )
     )
     .then(values =>
@@ -116,34 +194,16 @@ async function resolveDeepObject(obj, depth, currentKey) {
   return obj;
 }
 
-const createObject = (obj) => {
-  if (typeof obj !== 'object') {
-    throw new Error(`${obj} is not an object`);
+function create(val) {
+  if (!val || val === null || typeof val !== 'object') {
+    return val;
   }
-  return resolveDeepObject(obj, 1, '<root>');
-};
 
-const createArray = (arr) => {
-  if (!Array.isArray(arr)) {
-    throw new Error(`${arr} is not an array`);
+  if (isArrayType(val)) {
+    return createArray(val, 1, '<root array>');
   }
-  return Promise.all(arr.map(curr => Promise.resolve(curr)))
-  .catch(error => {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(error);
-  })
-};
 
-const create = (obj) => {
-  if (typeof obj !== 'object' && !Array.isArray(obj)) {
-    throw new Error(`${obj} is not an object or array`);
-  }
-  if (Array.isArray(obj)) {
-    return createArray(obj);
-  }
-  return createObject(obj);
+  return createObject(val, 1, '<root>');
 };
 
 // wrapper is inner and always accept opt and fn
@@ -170,12 +230,7 @@ const toFun = (optOrFn, fn) => {
 
 module.exports = toFun;
 module.exports.toFun = toFun;
-module.exports.create = create;
-module.exports.createObj = createObject;
-module.exports.createArr = createArray;
 
-// aliases
 module.exports.call = makefun;
-module.exports.final = create;
-module.exports.wait = create;
+module.exports.exec = makefun;
 module.exports.json = create;
