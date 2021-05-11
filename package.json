@@ -1,10 +1,12 @@
 {
   "name": "craftx",
   "version": "2.0.1",
-  "description": "Carefully craft JSON resolving all the promises",
+  "description": "Carefully craft JSON and async functions",
   "main": "dist/index.js",
   "files": [
-    "dist/index.js"
+    "dist/index.js",
+    "dist/fn.js",
+    "dist/json.js"
   ],
   "devDependencies": {
     "babel-minify": "^0.5.1",
