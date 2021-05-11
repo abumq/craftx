@@ -20,7 +20,7 @@
   </a>
 </p>
 
-## Installation
+# Installation
 
 ```bash
 npm i craftx -S
@@ -28,14 +28,45 @@ npm i craftx -S
 yarn add craftx
 ```
 
-## Introduction
+# Introduction
 
 Craftx is a utility for promises. It provides two basic functionalities:
 
 1. Craft a JSON object and resolve any promise before final JSON is produced
 2. Craft a function that would allow you to pass promises as parameters without worrying whether they're yet fulfilled or not.
 
-### 1. Craft a JSON
+## 1. Craft a JSON
+### TL;DR
+
+What do you think output would be?
+```javascript
+const fn = async () => 123;
+
+(async () => {
+  console.log({
+    age: fn(),
+  })
+})();
+```
+Answer is: `Object {age: Promise (resolved)}`
+
+How do we solve this problem?
+
+```javascript
+const craftx = require("craftx");
+
+const fn = async () => 123;
+
+(async () => {
+  console.log(await craftx.json({
+    age: fn(),
+  }))
+})();
+```
+
+Try it on [RunKit](https://npm.runkit.com/craftx)
+
+### Problem
 
 Let's say you need to create a JSON
 
@@ -74,6 +105,7 @@ and if you do this:
 
 the calls are now sequential and defeats the purpose of [non-blocking event based I/O](https://developers.redhat.com/blog/2016/08/16/why-should-i-use-node-js-the-non-blocking-event-io-framework/) that Node.js is known for.
 
+### Solution
 To handle this situation without wrapping the promise resolution in a separate function, you can use this utility package to handle this situation
 
 ```javascript
@@ -96,12 +128,42 @@ This will resolve only after all the promises are resolved. Resulting in:
 }
 ```
 
-#### Max depth
+### Max depth
 Default object depth supported by craftx is 64.
 
-### 2. Craft a Function
+## 2. Craft a Function
 
-#### Problem
+### TL;DR
+
+What do you think output would be?
+```javascript
+const getAge = async () => 123;
+const getDetail = async (age) => `The age is ${age}`;
+
+(async () => {
+  const result = await getDetail(getAge());
+  console.log(result);
+})();
+```
+Answer is: `The age is [object Promise]`
+
+How do we solve this problem?
+
+```javascript
+const craftx = require("craftx")
+
+const getAge = async () => 123;
+const getDetail = craftx.fn(async (age) => `The age is ${age}`);
+
+(async () => {
+  const result = await getDetail(getAge());
+  console.log(result);
+})();
+```
+
+Try it on [RunKit](https://npm.runkit.com/craftx)
+
+### Problem
 There are times when you want to use promise values without awaiting (i.e, automatically once the promise is fulfilled). This utility helps you achieve this goal using native promise mechanism.
 
 We will walk you through an example and provide explanation where necessary.
@@ -142,7 +204,7 @@ This has 2 basic problems.
 1. You're not making use of parallelism here. Which defeats the purpose of Promises to some extent.
 2. The code is very soon going to be messy and unreadable.
 
-#### Solution
+### Solution
 `craftx` allows you to "craft" a function that will help you achieve your goal without worrying about any of the above problem.
 
 ```javascript
@@ -165,7 +227,7 @@ This will result in:
 }
 ```
 
-#### Bulk Export
+### Bulk Export
 Converting existing exports to crafted functions is easy, either using `fn` for each function which can be cumbersome depending on number of functions; or you can simply convert the whole object using a helper function `fnExport`.
 
 Let's say you have:
@@ -195,7 +257,7 @@ module.exports = fnExport({
 
 Alternatively, you can do it when importing like in example of `/examples/json.js`. Doing it multiple times does not harm.
 
-#### Options
+### Options
 If the first parameter is an object for the `fn()`, that object is used for setting up the options.
 
 For example:
@@ -228,7 +290,7 @@ Following are the possible options
 | `debug` | Boolean value to tell craftx whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
 
-## License
+# License
 ```
 Copyright (c) 2020-present Amrayn Web Services
 
