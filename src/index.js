@@ -45,7 +45,7 @@ const NO_RESOLUTION_CLASS_LIST = [
   ...TYPED_ARRAY_NAMES,
 ];
 
-const makefun = (optOrFn, ...args) => {
+const functionify = (optOrFn, ...args) => {
   let options = {};
 
   const func = typeof optOrFn === 'function' ? optOrFn : args[0];
@@ -115,7 +115,7 @@ const isArrayType = o => o && !!ARRAY_TYPES[o.constructor.name];
 
 const createArray = (arr, depth, currentKey) => {
   if (depth === MAX_DEPTH) {
-    throw new Error(`Exceeded array depth supported by makefun ${depth} at ${currentKey}`);
+    throw new Error(`Exceeded array depth supported by craftjson ${depth} at ${currentKey}`);
   }
 
   if (!arr) {
@@ -133,8 +133,6 @@ const createArray = (arr, depth, currentKey) => {
       return createArray(curr, depth + 1, currentKey);
     }
 
-    console.log(typeof curr)
-
     return create(curr);
   })))
   .catch(error => {
@@ -148,7 +146,7 @@ const createArray = (arr, depth, currentKey) => {
 const createObject = (obj, depth, currentKey) => {
 
   if (depth === MAX_DEPTH) {
-    throw new Error(`Exceeded object depth supported by makefun ${depth} at ${currentKey}`);
+    throw new Error(`Exceeded object depth supported by craftjson ${depth} at ${currentKey}`);
   }
 
   if (!obj) {
@@ -174,9 +172,7 @@ const createObject = (obj, depth, currentKey) => {
     const keys = Object.keys(obj);
 
     return Promise.all(
-      keys.map(key =>
-        createObject(obj[key], depth + 1, key)
-      )
+      keys.map(key => createObject(obj[key], depth + 1, key))
     )
     .then(values =>
       keys.reduce((accum, key, idx) => ({
@@ -208,7 +204,7 @@ function create(val) {
 
 // wrapper is inner and always accept opt and fn
 const toFunWrapper = (opt, fn) => {
-  const result = (...args) => makefun(opt, fn, ...args);
+  const result = (...args) => functionify(opt, fn, ...args);
   result.options = opt || {};
   result.setOptions = (newOptions) => {
     if (!newOptions) {
@@ -228,9 +224,7 @@ const toFun = (optOrFn, fn) => {
   return toFunWrapper(optOrFn, fn);
 };
 
-module.exports = toFun;
-module.exports.toFun = toFun;
+module.exports.fn = toFun;
 
-module.exports.call = makefun;
-module.exports.exec = makefun;
+module.exports.exec = functionify;
 module.exports.json = create;

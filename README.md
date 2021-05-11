@@ -1,12 +1,8 @@
 <p align="center">
     <a href="https://github.com/amrayn/craftjson">
-      <img width="190px" src="https://github.com/amrayn/craftjson/raw/master/assets/logo.png" />
+      <img width="190px" src="https://github.com/amrayn/craftjson/raw/master/assets/logo.png?" />
     </a>
-    <p align="center">Carefully craft JSON resolving all the promises</p>
-</p>
-
-<p align="center">
-    •   •   •
+    <p align="center">Carefully craft JSON and async functions</p>
 </p>
 
 <p align="center">
@@ -19,279 +15,176 @@
   <a aria-label="License" href="https://github.com/amrayn/craftjson/blob/master/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/craftjson?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="Donate via PayPal" href="https://amrayn.com/donate">
-    <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=PayPal&color=purple&style=for-the-badge&labelColor=000000">
+  <a aria-label="Donate" href="https://amrayn.com/donate">
+    <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=Web&color=purple&style=for-the-badge&labelColor=000000">
   </a>
-</p>
-
-<p align="center">
-    •   •   •
 </p>
 
 ## Installation
 
 ```bash
-npm i craftjson -S
+npm i craftx -S
+# or
+yarn add craftx
 ```
 
-```bash
-yarn add craftjson
-```
+## Introduction
 
-## Get to the point!
+Craftx is a utility for promises. It provides two basic functionalities:
+
+1. Craft a JSON object and resolve any promise before final JSON is produced
+2. Craft a function that would allow you to pass promises as parameters without worrying whether they're yet fulfilled or not.
+
+### 1. Craft a JSON
+
+Let's say you need to create a JSON
+
 ```javascript
-const fn = require('craftjson');
-
-//
-// If we have bunch of promise based functions
-//
-const queryPerson_ = () => Promise.resolve({
+{
   id: 1,
-  name: 'John',
-});
-
-const queryDetails_ = (person) => Promise.resolve({
-  profile: 'His name is ' + person.name + ' (' + person.id + ')',
-});
-
-const queryCompany_ = () => Promise.resolve({
-  name: 'Amrayn Web Services',
-  department: 'IT',
-});
-/////////////////////////////////////////////////////////
-
-
-//
-// We craftjson of them
-//
-const queryPerson = fn(queryPerson_);
-const queryDetails = fn(queryDetails_);
-// We do not need to craftjson this function
-// as we do not require any promise based parameter
-// but we'll just do it to keep the consistency
-const queryCompany = fn(queryCompany_);
-
-
-/////////////////////////////////////////////////////////
-
-
-// We have a function that is going to call various promise based
-// functions and some require the return values of others
-const buildProps = () => {
-
-  // Note how we are not using any await
-  // meaning it's querying everything in parrallel
-  // and returned with single await
-  const person = queryPerson();
-  const details = queryDetails(person);
-  const company = queryCompany();
-
-  return fn.create({
-    bio: person,
-    details,
-    company,
-  });
+  name: 'John F Kennedy',
+  age: 45,
 }
-
-
-
-/////////////////////////////////////////////////////////
-
-
-
-(async () => {
-  // note buildProps is a promise
-  const props = buildProps();
-
-  // and data is also returning promise
-  const data = Promise.resolve(123);
-
-  const result = await fn.final({
-    props,
-    data
-  });
-
-  // the result is following (with only one await!):
-  //
-  // {
-  //   props: {
-  //     bio: { id: 1, name: 'John' },
-  //     details: { profile: 'His name is John (1)' },
-  //     company: { name: 'Amrayn Web Services', department: 'IT' }
-  //   },
-  //   data: 123
-  // }
-
-  console.log(result);
-})();
 ```
 
-There are other examples available [here](https://github.com/amrayn/craftjson/tree/master/examples) and this example and it's variant can be found [here](https://github.com/amrayn/craftjson/blob/master/examples/full.js) and [here](https://github.com/amrayn/craftjson/blob/master/examples/full-with-depth.js) respectively.
+This is good as long as you are not using promises, but if you want to use promises like:
 
-## Problem
-There are times when you want to use promise values once the promise is fulfilled. This library helps you achieve this goal using native promise mechanism.
+```javascript
+const queryName = () => Promise.resolve('John F Kennedy');
+const calculateAge = () => Promise.resolve(45);
 
-The following example shows you why this library is useful. We will walk you through the example and provide explanation where necessary. Please note, a runnable version of same example is available at `/examples/index.js`.
+{
+  id: 1,
+  name: queryName(),
+  age: calculateAge(),
+}
+```
+
+this will result potentially unresolved promises.
+
+and if you do this:
+
+```javascript
+{
+  id: 1,
+  name: await queryName(),
+  age: await calculateAge(),
+}
+```
+
+the calls are now sequential and defeats the purpose of [non-blocking event based I/O](https://developers.redhat.com/blog/2016/08/16/why-should-i-use-node-js-the-non-blocking-event-io-framework/) that Node.js is known for.
+
+To handle this situation without wrapping the promise resolution in a separate function, you can use this utility package to handle this situation
+
+```javascript
+const craftx = require('craftjson');
+
+await craftx.json({
+  id: 1,
+  name: queryName(),
+  age: calculateAge(),
+})
+```
+
+This will resolve only after all the promises are resolved. Resulting in:
+
+```javascript
+{
+  id: 1,
+  name: 'John F Kennedy',
+  age: 45,
+}
+```
+
+#### Max depth
+Default object depth supported by craftjson is 64.
+
+### 2. Craft a Function
+
+#### Problem
+There are times when you want to use promise values without awaiting (i.e, automatically once the promise is fulfilled). This utility helps you achieve this goal using native promise mechanism.
+
+We will walk you through an example and provide explanation where necessary.
 
 Let's say you have various utility functions to query the database.
 
 ```javascript
-const queryCompanyInfo = async () => ({
-  username: '@amrayn'
+const queryCompanyInfo_ = async () => ({
+  username: '@amrayn',
 });
 
-const queryAccountInfo = async (user) => ({
-  user,
-  created: '19-02-2020'
+const queryAccountInfo_ = async (company) => ({
+  company,
+  created: '19-02-2020',
 });
 ```
 
-Notice the `queryAccountInfo` requires `user` object that will be provided by `queryUserInfo`. If you use `Promise.all` directly (without this library) you won't be able to provide this (resolved) user object to `queryAccountInfo`.
+Notice the `queryAccountInfo_` takes `company` parameter (promise) that will be provided by `queryCompanyInfo_`. But you don't know whether this promise is fulfilled or not. If you use `Promise.all` directly (without this library) you won't be able to provide this (resolved) company object to `queryAccountInfo_`.
 
 ```javascript
 Promise.all([
-  queryUserInfo(),
-  queryAccountInfo(),
+  queryCompanyInfo_(),
+  queryAccountInfo_(), // notice we cannot provide "company" here
 ]).then(([userInfo, accountInfo]) => {
   console.log(accountInfo);
 })
+```
 
+A possible solution is to await for the promises first:
+
+```javascript
+const companyInfo = await queryCompanyInfo_();
+const accountInfo = queryAccountInfo_(companyInfo);
+```
+
+This has 2 basic problems.
+
+1. You're not making use of parallelism here. Which defeats the purpose of Promises to some extent.
+2. The code is very soon going to be messy and unreadable.
+
+#### Solution
+`craftx` allows you to "craft" a function that will help you achieve your goal without worrying about any of the above problem.
+
+```javascript
+const craftx = require('craftx'); // or you can import { fn }
+
+const queryCompanyInfo = craftx.fn(queryCompanyInfo_);
+const queryAccountInfo = craftx.fn(queryAccountInfo_);
+
+const finalJson = await queryAccountInfo(queryCompanyInfo())
 ```
 
 This will result in:
 
 ```javascript
 {
-  user: undefined,
-  created: '19-02-2020'
-}
-```
-
-because user was never passed in (and we could not have done it unless we separated it out in to a separate promise call)
-
-## Solution
-`craftjson` allows you to pass in the function and any arguments that function takes, be it promise or a static argument.
-
-```javascript
-const fn = require('craftjson');
-
-const userInfo = fn.exec(queryUserInfo);
-const accountInfo = fn.exec(queryAccountInfo, userInfo);
-```
-
-Once you have everything in place, you will finally create an object or array with utility functions.
-
-```javascript
-const finalResult = fn.json({
-  userInfo,
-  accountInfo,
-}).then(({ userInfo, accountInfo }) => {
-  console.log({
-    accountInfo,
-  });
-})
-```
-
-This will result in:
-
-```javascript
-{
-  user: {
-    username: '@amrayn'
+  company: {
+    username: '@amrayn',
   },
-  created: '19-02-2020'
+  created: '19-02-2020',
 }
 ```
 
-which is correctly resolved.
+#### Options
+If the first parameter is an object for the `fn()`, that object is used for setting up the options.
 
-## Advanced
-
-### Create Functions
-The above is basic usage of the library. You can simplify the usage by creating such function and make them more readable. It is extremely easy to do that.
+For example:
 
 ```javascript
-const fn = require('craftjson');
-
-const queryUserInfo_ = fn(queryUserInfo); // DONE!
-const queryAccountInfo_ = fn(queryAccountInfo);
-
-const userInfo = queryUserInfo_();
-const accountInfo = queryAccountInfo(userInfo);
+const queryCompanyInfo = craftx.fn({
+  startTime: res.startTime,
+  endTime: res.endTime,
+}, queryCompanyInfo_);
 ```
 
-#### FAQ: Can I do this to all my functions?
-craftjson library was designed to turn all your existing functions to this. This means you can create all your functions like:
+You can also override the options for a crafted function later.
 
 ```javascript
-const fn = require('craftjson');
-
-const myfn = fn(() => {
-  console.log('wifi')
-})
-
-const myfn2 = fn(async () => {
-  console.log('wifi2')
-})
-
-(async (resolve) => {
-  myfn();
-  await myfn2() // you can await your functions
-
-  // and much more
-})()
-```
-
-You can even export all your functions like this:
-
-[this is pseudo-example and won't work as is]
-
-```javascript
-const myAwesomeFunc = () => {};
-const myAwesomeFunc2 = () => {};
-const myAwesomeFunc3 = () => {};
-// ...
-
-export default craftjson(myAwesomeFunc);
-export {
-  myAwesomeFunc2: craftjson(myAwesomeFunc2),
-   // with options (options can be overriden at any time without need of importing the library)
-  myAwesomeFunc3: craftjson({ name: 'myAwesomeFunc3' }, myAwesomeFunc3),
-}
-```
-
-That way you don't have to re-import library where you are using the function.
-
-You can safely override the options, e.g,
-
-[this is pseudo-example and won't work as is]
-
-```javascript
-import { myAwesomeFunc2, myAwesomeFunc3 } from 'my-awesome-utils';
-
-export default (req, res, next) {
-  myAwesomeFunc2.setOptions({
-    // hint: server-timing
-    startTime: res.startTime,
-    endTime: res.endTime,
-  });
-
-  // this will keep the original name and override "debug" option
-  myAwesomeFunc3.setOptions({ debug: true });
-
-  myAwesomeFunc2();
-  myAwesomeFunc3();
-}
-
-```
-### Options
-You can pass option as first argument in both `fn()` and `fn.exec()`. If the first argument is object, the second must be the function.
-
-```javascript
-const accountInfo = fn.exec({debug: true}, queryAccountInfo, userInfo);
-
-// or
-const queryUserInfo_ = fn({debug: true}, queryUserInfo);
+queryCompanyInfo.setOptions({
+  // hint: server-timing
+  startTime: res.startTime,
+  endTime: res.endTime,
+});
 ```
 
 Following are the possible options
@@ -304,10 +197,6 @@ Following are the possible options
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
 | `debug` | Boolean value to tell craftjson whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
-**Note: Options can be override later after mypromisified version of function is created - see `/examples/override-options`**
-
-#### Max depth
-Default object depth supported by craftjson is 64.
 
 ## License
 ```

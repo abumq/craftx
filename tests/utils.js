@@ -1,4 +1,4 @@
-const fn = require('../src');
+const craftx = require('../src');
 
 const buildPerson_ = (details) => Promise.resolve(details);
 
@@ -25,8 +25,8 @@ const queryCompany_ = () => Promise.resolve({
   department: 'IT',
 });
 
-module.exports.buildPerson = fn(buildPerson_);
-module.exports.queryPerson = fn(queryPerson_);
-module.exports.queryProfile = fn(queryProfile_);
-module.exports.queryDetails = fn(queryDetails_);
-module.exports.queryCompany = fn(queryCompany_);
+module.exports.buildPerson = craftx.fn(buildPerson_);
+module.exports.queryPerson = craftx.fn(queryPerson_);
+module.exports.queryProfile = craftx.fn(queryProfile_);
+module.exports.queryDetails = craftx.fn(queryDetails_);
+module.exports.queryCompany = craftx.fn(queryCompany_);

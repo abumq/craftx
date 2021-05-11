@@ -1,6 +1,6 @@
 {
-  "name": "craftjson",
-  "version": "1.3.1",
+  "name": "craftx",
+  "version": "2.0.0",
   "description": "Carefully craft JSON resolving all the promises",
   "main": "dist/index.js",
   "files": [

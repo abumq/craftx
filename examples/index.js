@@ -1,15 +1,15 @@
-const fn = require('../src');
+const craftx = require('../src');
 const exampleUtils = require('./example-utils');
 
 const generateObj = (err = false) => {
-  const userInfo = fn.call(exampleUtils.queryUserInfo);
-  const accountInfo = fn.call(exampleUtils.queryAccountInfo, userInfo);
-  const systemInfo = fn.call(exampleUtils.querySystemInfo);
-  const config = fn.call(exampleUtils.queryConfig, 'web');
-  const withErr = err ? fn.call(exampleUtils.thisFnThrows)
+  const userInfo = craftx.exec(exampleUtils.queryUserInfo);
+  const accountInfo = craftx.exec(exampleUtils.queryAccountInfo, userInfo);
+  const systemInfo = craftx.exec(exampleUtils.querySystemInfo);
+  const config = craftx.exec(exampleUtils.queryConfig, 'web');
+  const withErr = err ? craftx.exec(exampleUtils.thisFnThrows)
     .catch(err => console.log('This was thrown to show you how to catch errors', err.message)) : null;
 
-  return fn.create({
+  return craftx.json({
     title: 'example',
     account: accountInfo,
     systemInfo,
