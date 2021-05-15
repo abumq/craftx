@@ -1,3 +1,6 @@
+## 2.0.4
+- Typed error for `TypeError`
+
 ## 2.0.3
 - Updates to `setOptions` and added test coverage for it
 - Fix error when function is of incorrect type

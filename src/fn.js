@@ -21,7 +21,7 @@ const exec = (optOrFn, ...args) => {
   const func = typeof optOrFn === 'function' ? optOrFn : args[0];
 
   if (typeof func !== 'function') {
-    throw new Error(`${func} is not a function`);
+    throw new TypeError(`${func} is not a function`);
   }
 
   if (typeof optOrFn === 'object') {
@@ -82,7 +82,7 @@ const toFunWrapper = (opt, fn) => {
   result._craftxOptions = opt || {};
   result.setOptions = (newOptions) => {
     if (!newOptions || typeof newOptions !== 'object') {
-      throw new Error(`${newOptions} is not an object`);
+      throw new TypeError(`${newOptions} is not an object`);
     }
 
     // Note:
