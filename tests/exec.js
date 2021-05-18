@@ -54,9 +54,9 @@ describe('Using exec()', () => {
 describe('Using craftx.fn()', () => {
 
   // has options
-  const newQueryUsername = craftx.fn({
+  const newQueryUsername = craftx.fn(queryUsername, {
     name: 'newQueryUsername',
-  }, queryUsername);
+  });
 
   // no options
   const rawQueryUsername = craftx.fn(queryUsername);

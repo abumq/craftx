@@ -1,5 +1,3 @@
-const craftx = require('../src');
-
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const queryUserInfo = async () => {

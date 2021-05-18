@@ -1,3 +1,8 @@
+## 3.0.0
+- BREAKING: Swapped first parameter to be always function for `fn()` and second to be options.
+- FEATURE: Added `get` for getting path in object when resolved
+- FEATURE: Added second parameter to `json()` for options
+
 ## 2.0.4
 - Typed error for `TypeError`
 

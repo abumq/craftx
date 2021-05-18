@@ -43,5 +43,8 @@
   "bugs": {
     "url": "https://github.com/amrayn/craftx/issues"
   },
-  "homepage": "https://github.com/amrayn/craftx#readme"
+  "homepage": "https://github.com/amrayn/craftx#readme",
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  }
 }

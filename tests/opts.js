@@ -5,10 +5,10 @@ describe('Options test', () => {
 
   it('Preset options', () => {
     const runStatus = { started: false, finished: false };
-    const myfunc = craftx.fn({
+    const myfunc = craftx.fn(async () => 1, {
       startTime: () => runStatus.started = true,
       endTime: () => runStatus.finished = true,
-    }, async () => 1);
+    });
 
     assert.equal(runStatus.started, false);
     assert.equal(runStatus.finished, false);
@@ -23,11 +23,11 @@ describe('Options test', () => {
 
   it('Override options', () => {
     const runStatus = { started: false, finished: false };
-    const myfunc = craftx.fn({
+    const myfunc = craftx.fn(async () => 1, {
       name: 'myfunc',
       startTime: () => runStatus.started = true,
       endTime: () => runStatus.finished = true,
-    }, async () => 1);
+    });
 
     assert.equal(runStatus.started, false);
     assert.equal(runStatus.finished, false);

@@ -25,8 +25,13 @@ const queryCompany_ = () => Promise.resolve({
   department: 'IT',
 });
 
+const throwableObj_ = (doThrow = true) => doThrow ? Promise.reject('Thrown intentionally') : Promise.resolve({
+  status: 200,
+});
+
 module.exports.buildPerson = craftx.fn(buildPerson_);
 module.exports.queryPerson = craftx.fn(queryPerson_);
 module.exports.queryProfile = craftx.fn(queryProfile_);
 module.exports.queryDetails = craftx.fn(queryDetails_);
 module.exports.queryCompany = craftx.fn(queryCompany_);
+module.exports.throwableObj = craftx.fn(throwableObj_);

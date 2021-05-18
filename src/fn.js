@@ -43,7 +43,7 @@ const exec = (optOrFn, ...args) => {
   if (!options.name && func.name !== '') {
     options.name = func.name;
   }
-  if (options.startTime) {
+  if (typeof options.startTime === 'function') {
     options.startTime(options.name, options.description);
   }
   const argsAsPromises = args.map(curr => Promise.resolve(curr));
@@ -60,12 +60,12 @@ const exec = (optOrFn, ...args) => {
       }
       return finalResult;
     } finally {
-      if (options.endTime) {
+      if (typeof options.endTime === 'function') {
         options.endTime(options.name);
       }
     }
   }).catch(error => {
-    if (options.endTime) {
+    if (typeof options.endTime === 'function') {
       options.endTime(options.name);
     }
     if (error instanceof Error) {
@@ -75,31 +75,22 @@ const exec = (optOrFn, ...args) => {
   });
 };
 
-// wrapper is inner and always accept opt and fn
-const toFunWrapper = (opt, fn) => {
-  const result = (...args) => exec(opt, fn, ...args);
-  result._isCraftx = true;
-  result._craftxOptions = opt || {};
-  result.setOptions = (newOptions) => {
-    if (!newOptions || typeof newOptions !== 'object') {
-      throw new TypeError(`${newOptions} is not an object`);
-    }
-
-    // Note:
-    // do not use reduce here as we want to modify the
-    // object in previously initiated memory
-    Object.keys(newOptions).forEach(currOptKey => {
-      result._craftxOptions[currOptKey] = newOptions[currOptKey];
-    });
-  };
-  return result;
-}
-
-const fn = (optOrFn, fn) => {
-  if (typeof optOrFn === 'function') {
-    return toFunWrapper({}, optOrFn);
+const fn = (func, opt = {}) => {
+  if (typeof func !== 'function') {
+    throw new TypeError(`${func} is not a function`);
   }
-  return toFunWrapper(optOrFn, fn);
+  const finalFunc = (...args) => exec(opt, func, ...args);
+  finalFunc._isCraftx = true;
+  finalFunc._craftxOptions = opt;
+  finalFunc.setOptions = ({ startTime, endTime, debug, name, description }) => {
+    // we use destructured option instead of Object.keys in params for performance
+    finalFunc._craftxOptions.endTime = endTime || finalFunc._craftxOptions.endTime;
+    finalFunc._craftxOptions.startTime = startTime || finalFunc._craftxOptions.startTime;
+    finalFunc._craftxOptions.debug = debug || finalFunc._craftxOptions.debug;
+    finalFunc._craftxOptions.name = name || finalFunc._craftxOptions.name;
+    finalFunc._craftxOptions.description = description || finalFunc._craftxOptions.description;
+  }
+  return finalFunc;
 };
 
 const fnExport = (obj) => {

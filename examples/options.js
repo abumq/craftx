@@ -2,7 +2,7 @@ const { fn, json } = require('../src');
 const exampleUtils = require('./example-utils');
 
 const queryUserInfo = fn(exampleUtils.queryUserInfo);
-const queryAccountInfo = fn({
+const queryAccountInfo = fn(exampleUtils.queryAccountInfo, {
   debug: true,
   startTime: (name, desc) => {
     console.log('startTime for %s', name);
@@ -10,15 +10,8 @@ const queryAccountInfo = fn({
   endTime: (name) => {
     console.log('endTime for %s', name);
   },
-}, exampleUtils.queryAccountInfo);
-
-const accountInfo = queryAccountInfo(queryUserInfo());
+});
 
 (async () => {
-  const r = await json({
-    accountInfo,
-  });
-
-  console.log(r);
-
+  console.log(await queryAccountInfo(queryUserInfo()))
 })();

@@ -40,40 +40,40 @@ Craftx is a utility for promises. It provides two basic functionalities:
 
 What do you think output would be?
 ```javascript
-const fn = async () => 123;
+const calcAge = async () => 65;
 
 (async () => {
   console.log({
-    age: fn(),
+    age: calcAge(),
   })
 })();
 ```
 Answer is: `Object {age: Promise (resolved)}`
 
-How do we solve this problem?
+How do we solve this problem? Either by adding a lot of awaits for each promise, or just by simply:
 
 ```javascript
-const craftx = require("craftx");
+const { json } = require("craftx");
 
-const fn = async () => 123;
+const calcAge = async () => 65;
 
 (async () => {
-  console.log(await craftx.json({
-    age: fn(),
+  console.log(await json({
+    age: calcAge(),
   }))
 })();
 ```
 
 Try it on [RunKit](https://npm.runkit.com/craftx)
 
-### Problem
+### The Problem
 
 Let's say you need to create a JSON
 
 ```javascript
 {
   id: 1,
-  name: 'John F Kennedy',
+  name: 'John F. Kennedy',
   age: 45,
 }
 ```
@@ -81,7 +81,7 @@ Let's say you need to create a JSON
 This is good as long as you are not using promises, but if you want to use promises like:
 
 ```javascript
-const queryName = () => Promise.resolve('John F Kennedy');
+const queryName = () => Promise.resolve('John F. Kennedy');
 const calculateAge = () => Promise.resolve(45);
 
 {
@@ -109,9 +109,9 @@ the calls are now sequential and defeats the purpose of [non-blocking event base
 To handle this situation without wrapping the promise resolution in a separate function, you can use this utility package to handle this situation
 
 ```javascript
-const craftx = require('craftx');
+const { json } = require('craftx');
 
-await craftx.json({
+await json({
   id: 1,
   name: queryName(),
   age: calculateAge(),
@@ -205,13 +205,13 @@ This has 2 basic problems.
 2. The code is very soon going to be messy and unreadable.
 
 ### Solution
-`craftx` allows you to "craft" a function that will help you achieve your goal without worrying about any of the above problem.
+craftx allows you to "craft" a function that will help you achieve your goal without worrying about any of the above problem.
 
 ```javascript
-const craftx = require('craftx'); // or you can import { fn }
+const { fn } = require('craftx'); // or you can import { fn }
 
-const queryCompanyInfo = craftx.fn(queryCompanyInfo_);
-const queryAccountInfo = craftx.fn(queryAccountInfo_);
+const queryCompanyInfo = fn(queryCompanyInfo_);
+const queryAccountInfo = fn(queryAccountInfo_);
 
 const finalJson = await queryAccountInfo(queryCompanyInfo())
 ```
@@ -226,6 +226,40 @@ This will result in:
   created: '19-02-2020',
 }
 ```
+
+## Misc
+
+### Options
+If the first parameter is an object for the `fn()`, that object is used for setting up the options.
+
+For example:
+
+```javascript
+const getNumb = fn(() => 123, {
+  startTime: res.startTime,
+  endTime: res.endTime,
+});
+```
+
+You can also override the options for a crafted function later.
+
+```javascript
+getNumb.setOptions({
+  // hint: server-timing
+  startTime: res.startTime,
+  endTime: res.endTime,
+});
+```
+
+Following are the possible options
+
+| **Option** | **Description** |
+|--|--|
+| `name` | An identity for the function. Defaults to `<function>.name` - **IT MUST NOT CONTAIN SPACE** |
+| `description` | A description for the function |
+| `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
+| `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
+| `debug` | Boolean value to tell craftx whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
 ### Bulk Export
 Converting existing exports to crafted functions is easy, either using `fn` for each function which can be cumbersome depending on number of functions; or you can simply convert the whole object using a helper function `fnExport`.
@@ -257,38 +291,46 @@ module.exports = fnExport({
 
 Alternatively, you can do it when importing like in example of `/examples/json.js`. Doing it multiple times does not harm.
 
-### Options
-If the first parameter is an object for the `fn()`, that object is used for setting up the options.
-
-For example:
+### Get Object Value
+If you have a function that returns an object, and you want to grab just one specific value from the object, you can use built-in `get` function to do that.
 
 ```javascript
-const queryCompanyInfo = craftx.fn({
-  startTime: res.startTime,
-  endTime: res.endTime,
-}, queryCompanyInfo_);
-```
+const { get } = require('../src');
 
-You can also override the options for a crafted function later.
-
-```javascript
-queryCompanyInfo.setOptions({
-  // hint: server-timing
-  startTime: res.startTime,
-  endTime: res.endTime,
+const getProfile = async (uid) => ({
+  name: 'John',
+  age: 45,
+  father: {
+    name: 'Peter',
+  },
 });
+
+(async () => {
+  console.log(await get(getProfile(), 'father.name')) // output: Peter
+})();
 ```
 
-Following are the possible options
+Synopsis: `get(object, path, options)`. The `options` is passed through to `fn()` internally.
 
-| **Option** | **Description** |
-|--|--|
-| `name` | An identity for the function. Defaults to `<function>.name` - **IT MUST NOT CONTAIN SPACE** |
-| `description` | A description for the function |
-| `startTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name, description) => {}` - the `name` and `description` is passed back to this function |
-| `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
-| `debug` | Boolean value to tell craftx whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
+**NOTE:** This function uses [lodash.get](https://www.npmjs.com/package/lodash.get) to get the path.
 
+### Execute Directly
+If you want to execute function directly without "crafting" a function, you can do so using `exec()`
+
+```javascript
+const { exec } = require('../src');
+const { queryAccountInfo, queryUserInfo } = require('./example-utils');
+
+(async () => {
+  console.log(await exec(queryAccountInfo, queryUserInfo()));
+})();
+```
+
+In above example, the resolved value from `queryUserInfo()` is guaranteed to be available in `queryAccountInfo(userInfo)`
+
+Synopsis:
+ * `exec(func, param1, param2, ...)`
+ * `exec(options, func, param1, param2, ...)`
 
 # License
 ```

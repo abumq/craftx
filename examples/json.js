@@ -1,7 +1,7 @@
-const craftx = require('../src');
+const { fnExport, json } = require('../src');
 const originalExamples = require('./example-utils');
 
-const exampleUtils = craftx.fnExport(originalExamples)
+const exampleUtils = fnExport(originalExamples)
 
 const generateObj = (err = false) => {
   const userInfo = exampleUtils.queryUserInfo();
@@ -12,7 +12,7 @@ const generateObj = (err = false) => {
   const withoutErr = err ? exampleUtils.thisFnThrows()
     .catch(err => console.log('This was thrown to show you how to catch errors', err.message)) : null;
 
-  return craftx.json({
+  return json({
     title: 'example',
     account: accountInfo,
     systemInfo,

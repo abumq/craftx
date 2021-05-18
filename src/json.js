@@ -53,7 +53,7 @@ const createArrInstance = (ArrayInstanceType, items) =>
 // do not use Array.isArray as it won't resolve typed arrays
 const isArrayType = o => o && !!ARRAY_TYPES[o.constructor.name];
 
-const createArray = (arr, depth, currentKey) => {
+const createArray = (arr, depth, currentKey, opts = {}) => {
   if (depth === MAX_DEPTH) {
     throw new Error(`Exceeded array depth supported by craftx ${depth} at ${currentKey}`);
   }
@@ -64,6 +64,10 @@ const createArray = (arr, depth, currentKey) => {
 
   const ArrayInstanceType = ARRAY_TYPES[arr.constructor.name] || Array;
 
+  if (opts.name && typeof opts.startTime === 'function') {
+    opts.startTime(opts.name, opts.description);
+  }
+
   // Something to note here
   // Promise.all resolves it to Array instead of typed array
   // so we do not have a way to resolve correct array type at
@@ -73,9 +77,16 @@ const createArray = (arr, depth, currentKey) => {
       return createArray(curr, depth + 1, currentKey);
     }
 
-    return json(curr);
+    const result = json(curr, opts);
+    if (opts.name && typeof opts.endTime === 'function') {
+      opts.endTime(opts.name);
+    }
+    return result;
   })))
   .catch(error => {
+    if (opts.name && typeof opts.endTime === 'function') {
+      opts.endTime(opts.name);
+    }
     if (error instanceof Error) {
       throw error;
     }
@@ -83,7 +94,7 @@ const createArray = (arr, depth, currentKey) => {
   })
 };
 
-const createObject = (obj, depth, currentKey) => {
+const createObject = (obj, depth, currentKey, opts = {}) => {
 
   if (depth === MAX_DEPTH) {
     throw new Error(`Exceeded object depth supported by craftx ${depth} at ${currentKey}`);
@@ -102,7 +113,7 @@ const createObject = (obj, depth, currentKey) => {
     const constructorName = obj.constructor.name;
     if (NO_RESOLUTION_CLASS_LIST.some(f => f === constructorName)) {
       if (TYPED_ARRAY_NAMES.some(f => f === constructorName)) {
-        return createArray(obj, 1, currentKey);
+        return createArray(obj, 1, currentKey, opts);
       }
       return obj;
     }
@@ -110,17 +121,25 @@ const createObject = (obj, depth, currentKey) => {
 
   if (typeof obj === 'object') {
     const keys = Object.keys(obj);
-
+    if (opts.name && typeof opts.startTime === 'function') {
+      opts.startTime(opts.name, opts.description);
+    }
     return Promise.all(
       keys.map(key => createObject(obj[key], depth + 1, key))
     )
-    .then(values =>
-      keys.reduce((accum, key, idx) => ({
+    .then(values => {
+      if (opts.name && typeof opts.startTime === 'function') {
+        opts.endTime(opts.name);
+      }
+      return keys.reduce((accum, key, idx) => ({
         ...accum,
         [key]: values[idx],
       }), {})
-    )
+    })
     .catch(error => {
+      if (opts.name && typeof opts.endTime === 'function') {
+        opts.endTime(opts.name);
+      }
       if (error instanceof Error) {
         throw error;
       }
@@ -130,16 +149,16 @@ const createObject = (obj, depth, currentKey) => {
   return obj;
 }
 
-function json(val) {
+function json(val, opts = {}) {
   if (!val || val === null || typeof val !== 'object') {
     return val;
   }
 
   if (isArrayType(val)) {
-    return createArray(val, 1, '<root array>');
+    return createArray(val, 1, '<root array>', opts);
   }
 
-  return createObject(val, 1, '<root>');
+  return createObject(val, 1, '<root>', opts);
 };
 
 module.exports.json = json;
