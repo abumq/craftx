@@ -248,6 +248,11 @@ getNumb.setOptions({
   // hint: server-timing
   startTime: res.startTime,
   endTime: res.endTime,
+
+  name: 'getNumb',
+  description: 'Get number',
+
+  debug: false, // to enable craftx debugging
 });
 ```
 
@@ -307,10 +312,12 @@ const getProfile = async (uid) => ({
 
 (async () => {
   console.log(await get(getProfile(), 'father.name')) // output: Peter
+  console.log(await get(getProfile(), 'mother.name', 'Steph')) // output: Steph
+  console.log(await get(getProfile(), 'brother.name')) // output: undefined
 })();
 ```
 
-Synopsis: `get(object, path, options)`. The `options` is passed through to `fn()` internally.
+Synopsis: `get(object, path, defaultValue, options)`. The `options` is passed through to `fn()` internally.
 
 **NOTE:** This function uses [lodash.get](https://www.npmjs.com/package/lodash.get) to get the path.
 
