@@ -1,6 +1,6 @@
 {
   "name": "craftx",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "Carefully craft JSON and async functions",
   "main": "dist/index.js",
   "files": [
