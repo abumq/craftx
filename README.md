@@ -336,7 +336,7 @@ Synopsis:
 ```
 Copyright (c) 2020-present Amrayn Web Services
 
-https://github.com/amrayn/
+https://github.com/amrayn/craftx
 https://amrayn.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
