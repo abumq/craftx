@@ -32,6 +32,6 @@ module.exports.json = json;
 
 // get value from the object using lodash.get
 // when object is resolved
-module.exports.get = (objOrPromise, path, options = {}) =>
-  fn(o => get(o, path), options)
+module.exports.get = (objOrPromise, path, defaultVal, options = {}) =>
+  fn(o => get(o, path) || defaultVal, options)
   (objOrPromise);

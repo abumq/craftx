@@ -1,3 +1,6 @@
+## 3.0.1
+- `get` with default value as second parameter
+
 ## 3.0.0
 - BREAKING: Swapped first parameter to be always function for `fn()` and second to be options.
 - FEATURE: Added `get` for getting path in object when resolved
