@@ -21,7 +21,7 @@ describe('Options test', () => {
     })
   });
 
-  it('Override options', () => {
+  it('Override options', async () => {
     const runStatus = { started: false, finished: false };
     const myfunc = craftx.fn(async () => 1, {
       name: 'myfunc',
@@ -40,11 +40,10 @@ describe('Options test', () => {
 
     assert.equal(myfunc._craftxOptions.name, 'newname');
 
-    myfunc().then(result => {
-      assert.equal(result, 1);
+    const result = await myfunc();
+    assert.equal(result, 1);
 
-      assert.equal(runStatus.started, true);
-      assert.equal(runStatus.finished, 'done_newname');
-    })
+    assert.equal(runStatus.started, true);
+    assert.equal(runStatus.finished, 'done_newname');
   });
 });
