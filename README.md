@@ -229,6 +229,31 @@ This will result in:
 
 ## Misc
 
+### Get Object Value
+If you have a function that returns an object, and you want to grab just one specific value from the object, you can use built-in `get` function to do that.
+
+```javascript
+const { get } = require('craftx');
+
+const getProfile = async (uid) => ({
+  name: 'John',
+  age: 45,
+  father: {
+    name: 'Peter',
+  },
+});
+
+(async () => {
+  console.log(await get(getProfile(), 'father.name')) // output: Peter
+  console.log(await get(getProfile(), 'mother.name', 'Steph')) // output: Steph
+  console.log(await get(getProfile(), 'brother.name')) // output: undefined
+})();
+```
+
+Synopsis: `get(object, path, defaultValue, options)`. The `options` is passed through to `fn()` internally.
+
+**NOTE:** This function uses [lodash.get](https://www.npmjs.com/package/lodash.get) to resolve the JSON path.
+
 ### Options
 If the first parameter is an object for the `fn()`, that object is used for setting up the options.
 
@@ -266,7 +291,7 @@ Following are the possible options
 | `endTime` | Function for [server timing](https://www.w3.org/TR/server-timing/) - `(name) => {}` - the `name` is passed back to this function |
 | `debug` | Boolean value to tell craftx whether debug logging is enabled or not. It will use a global `logger.debug()` object. If no such object exists, it will use `console.debug()` |
 
-### Bulk Export
+### Bulk Export (Advanced)
 Converting existing exports to crafted functions is easy, either using `fn` for each function which can be cumbersome depending on number of functions; or you can simply convert the whole object using a helper function `fnExport`.
 
 Let's say you have:
@@ -296,52 +321,10 @@ module.exports = fnExport({
 
 Alternatively, you can do it when importing like in example of `/examples/json.js`. Doing it multiple times does not harm.
 
-### Get Object Value
-If you have a function that returns an object, and you want to grab just one specific value from the object, you can use built-in `get` function to do that.
-
-```javascript
-const { get } = require('../src');
-
-const getProfile = async (uid) => ({
-  name: 'John',
-  age: 45,
-  father: {
-    name: 'Peter',
-  },
-});
-
-(async () => {
-  console.log(await get(getProfile(), 'father.name')) // output: Peter
-  console.log(await get(getProfile(), 'mother.name', 'Steph')) // output: Steph
-  console.log(await get(getProfile(), 'brother.name')) // output: undefined
-})();
-```
-
-Synopsis: `get(object, path, defaultValue, options)`. The `options` is passed through to `fn()` internally.
-
-**NOTE:** This function uses [lodash.get](https://www.npmjs.com/package/lodash.get) to get the path.
-
-### Execute Directly
-If you want to execute function directly without "crafting" a function, you can do so using `exec()`
-
-```javascript
-const { exec } = require('../src');
-const { queryAccountInfo, queryUserInfo } = require('./example-utils');
-
-(async () => {
-  console.log(await exec(queryAccountInfo, queryUserInfo()));
-})();
-```
-
-In above example, the resolved value from `queryUserInfo()` is guaranteed to be available in `queryAccountInfo(userInfo)`
-
-Synopsis:
- * `exec(func, param1, param2, ...)`
- * `exec(options, func, param1, param2, ...)`
-
 # License
 ```
-Copyright (c) 2020-present Amrayn Web Services
+Copyright (c) 2020-present Amrayn Developers
+Copyright (c) 2020-present @abumusamq
 
 https://github.com/amrayn/craftx
 https://amrayn.com

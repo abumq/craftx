@@ -31,10 +31,7 @@
     "json",
     "async-json"
   ],
-  "engines": {
-    "node": ">= 14"
-  },
-  "author": "Amrayn Web Services <opensource@amrayn.com>",
+  "author": "Amrayn Developers <opensource@amrayn.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
