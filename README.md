@@ -95,7 +95,7 @@ const calcAge = async () => 65;
 Try it on [RunKit](https://npm.runkit.com/craftx)
 
 <details>
-  <section>Read in detail</section>
+  <summary>Read in detail</summary>
 
 ### The Problem
 
@@ -166,7 +166,7 @@ This will resolve only after all the promises are resolved. Resulting in:
 
 Default object depth supported by craftx is `64`.
 
-## 2. Craft a Function
+## 2. Async Function
 
 ### TL;DR
 
@@ -203,7 +203,7 @@ const getDetail = fn(async (age) => `The age is ${age}`); // notice the wrap aro
 Try it on [RunKit](https://npm.runkit.com/craftx)
 
 <details>
-  <section>Read in detail</section>
+  <summary>Read in detail</summary>
 
 ### Problem
 
