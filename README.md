@@ -28,6 +28,23 @@ npm i craftx -S
 yarn add craftx
 ```
 
+# Import
+
+You can use any of these methods to use craftx in your application
+
+```javascript
+// using import
+import { fn, json } from "craftx";
+
+import craftx from "craftx";
+
+// using require
+
+const { fn, json } = require("craftx");
+
+const craftx = require("craftx");
+```
+
 # Introduction
 
 Craftx is a javascript utility for promises. It provides two basic functionalities:
@@ -78,7 +95,8 @@ const calcAge = async () => 65;
 Try it on [RunKit](https://npm.runkit.com/craftx)
 
 <details>
-<section>Read in detail</section>
+  <section>Read in detail</section>
+
 ### The Problem
 
 Let's say you need to create a JSON
@@ -185,8 +203,10 @@ const getDetail = fn(async (age) => `The age is ${age}`); // notice the wrap aro
 Try it on [RunKit](https://npm.runkit.com/craftx)
 
 <details>
-<section>Read in detail</section>
+  <section>Read in detail</section>
+
 ### Problem
+
 There are times when you want to use promise values without awaiting (i.e, automatically once the promise is fulfilled). This utility helps you achieve this goal using native promise mechanism.
 
 We will walk you through an example and provide explanation where necessary.
