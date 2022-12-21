@@ -1,4 +1,5 @@
-// Copyright (c) 2020-present Amrayn Web Services
+// Copyright (c) 2020-present Amrayn.com Developers
+// Copyright (c) 2020-present @abumusamq
 //
 // https://github.com/amrayn/craftx
 // https://amrayn.com
