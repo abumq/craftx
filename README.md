@@ -6,17 +6,11 @@
 </p>
 
 <p align="center">
-  <a aria-label="Build Status" href="https://travis-ci.org/amrayn/craftx">
-    <img alt="" src="https://img.shields.io/travis/amrayn/craftx/master.svg?style=for-the-badge&labelColor=000000">
-  </a>
   <a aria-label="NPM version" href="https://www.npmjs.com/package/craftx">
     <img alt="" src="https://img.shields.io/npm/v/craftx.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a aria-label="License" href="https://github.com/amrayn/craftx/blob/master/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/craftx?style=for-the-badge&labelColor=000000">
-  </a>
-  <a aria-label="Donate" href="https://amrayn.com/donate">
-    <img alt="" src="https://img.shields.io/static/v1?label=Donate&message=Web&color=purple&style=for-the-badge&labelColor=000000">
   </a>
 </p>
 
@@ -374,8 +368,7 @@ Alternatively, you can do it when importing like in example of `/examples/json.j
 # License
 
 ```
-Copyright (c) 2020-present Amrayn.com Developers
-Copyright (c) 2020-present @abumusamq
+Copyright (c) 2020-present Amrayn.com
 
 https://github.com/amrayn/craftx
 https://amrayn.com
