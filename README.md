@@ -368,10 +368,9 @@ Alternatively, you can do it when importing like in example of `/examples/json.j
 # License
 
 ```
-Copyright (c) 2020-present Amrayn.com
+Copyright (c) 2020-present @abumq (Majid Q.)
 
-https://github.com/amrayn/craftx
-https://amrayn.com
+https://github.com/abumq/craftx
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
