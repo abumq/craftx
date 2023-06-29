@@ -2,7 +2,7 @@
     <a href="https://github.com/amrayn/craftx">
       <img width="190px" src="https://github.com/amrayn/craftx/raw/master/assets/logo.png?" />
     </a>
-    <p align="center">Async functions and JSON with guaranteed resolved parameters and fields</p>
+    <p align="center">Multiple async calls with single await</p>
 </p>
 
 <p align="center">
@@ -41,10 +41,10 @@ const craftx = require("craftx");
 
 # Introduction
 
-Craftx is a javascript utility for promises. It provides two basic functionalities:
+Craftx is a powerful javaScript library that let you craft or call asynchronous functions with single await at the end. This library comes with two built-in functionalities that covers all the basis:
 
 1. When you create a JSON, you are guaranteed to have all the fields resolved instead of pending promises.
-2. When you read a function parameter, you are guaranteed to have all the parameters resolved instead of pending promises.
+2. When you access function parameter, you are guaranteed to have all the parameters resolved instead of pending promises.
 
 ## 1. JSON
 
