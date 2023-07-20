@@ -1,6 +1,6 @@
 <p align="center">
-    <a href="https://github.com/amrayn/craftx">
-      <img width="190px" src="https://github.com/amrayn/craftx/raw/master/assets/logo.png?" />
+    <a href="https://github.com/abumq/craftx">
+      <img width="190px" src="https://github.com/abumq/craftx/raw/master/assets/logo.png?" />
     </a>
     <p align="center">Multiple async calls with single await</p>
 </p>
@@ -9,7 +9,7 @@
   <a aria-label="NPM version" href="https://www.npmjs.com/package/craftx">
     <img alt="" src="https://img.shields.io/npm/v/craftx.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a aria-label="License" href="https://github.com/amrayn/craftx/blob/master/LICENSE">
+  <a aria-label="License" href="https://github.com/abumq/craftx/blob/master/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/craftx?style=for-the-badge&labelColor=000000">
   </a>
 </p>
