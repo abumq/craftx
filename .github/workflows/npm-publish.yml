@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      # Configure Git
       - name: Git configuration
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -35,6 +34,8 @@ jobs:
       - run: npm publish --patch --dry-run
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-      - run: date >> examples/test-commit
-      - run: git commit -a -m 'auto commit (testing actions)'
-      - run: git push
+      - name: Commit the update
+        run: |
+          npm version patch
+          git commit -a -m 'auto commit (testing actions)'
+          git push
