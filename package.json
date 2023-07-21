@@ -1,6 +1,6 @@
 {
   "name": "craftx",
-  "version": "3.2.0",
+  "version": "3.2.2",
   "description": "Multiple async calls with single await",
   "main": "dist/index.js",
   "files": [
