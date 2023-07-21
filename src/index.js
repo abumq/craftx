@@ -15,7 +15,7 @@
 // limitations under the License.
 
 const get = require('lodash.get');
-const { fn, exec, fnExport, convertObjParamFn } = require('./fn');
+const { fn, exec, fnExport } = require('./fn');
 const { json } = require('./json');
 
 // default export

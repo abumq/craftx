@@ -1,7 +1,7 @@
 const assert = require('assert');
 const craftx = require('../src');
 
-describe('Test convertObjParamFn()', () => {
+describe('Test fnjson()', () => {
 
   describe('Given a sync function', () => {
     const myfn = ({ p1, p2 }) => `result => ${p1} & ${p2}`;
