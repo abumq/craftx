@@ -38,7 +38,6 @@ jobs:
           sed -i "s/## Unreleased/## Unreleased\n\n## $(npm info craftx version)/g" CHANGELOG.md
       - name: Commit the update
         run: |
-          git checkout master
           git add .
           git commit --amend --no-edit
           git push
