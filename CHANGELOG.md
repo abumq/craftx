@@ -1,3 +1,6 @@
+## Unreleased
+- No change to API
+
 ## 3.1.0
 
 - Added helper `fnjson` to convert a sync function that takes object and return async function
