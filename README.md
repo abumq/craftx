@@ -269,6 +269,21 @@ This will result in:
 
 ## Misc
 
+### Convert param based function
+`fn()` is good when the function takes normal parameters, e.g, `myfn(param1, param2)` but this will not work if we have json based parameters, e.g, `myfn({ param1: 1, param2: Promise.resolve(2) })`
+
+For this `fnjson()` was added.
+
+Simply pass in function in to this function.
+
+```javascript
+const getName = ({ firstName, lastName }) => `${firstName} ${lastName}`;
+
+const getNameSync = fnjson(getName);
+```
+
+Now if you pass in JSON with unresolved promises to the function, it would be correctly passed in to `getName` function
+
 ### Get Object Value
 
 If you have a function that returns an object, and you want to grab just one specific value from the object, you can use built-in `get` function to do that.
