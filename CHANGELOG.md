@@ -1,4 +1,6 @@
 ## Unreleased
+- No change to API
+- Using Github actions to publish package and run tests
 
 ## 3.1.4
 - No change to API
