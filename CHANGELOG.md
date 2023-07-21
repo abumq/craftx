@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.2.4
 - No change to API (ghost release)
 - Using Github actions to publish package and run tests
 
