@@ -40,4 +40,4 @@ jobs:
         run: |
           git add .
           git commit --amend --no-edit
-          git push
+          git push origin HEAD:master
