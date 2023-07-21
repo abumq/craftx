@@ -1,5 +1,5 @@
 ## Unreleased
-- No change to API
+- No change to API (ghost release)
 - Using Github actions to publish package and run tests
 
 ## 3.1.4
