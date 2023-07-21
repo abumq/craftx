@@ -35,5 +35,11 @@ jobs:
       - run: npm publish --patch
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: Update change log
+        run: |
+          sed -i "s/## Unreleased/## Unreleased\n\n## $(npm info craftx version)/g" CHANGELOG.md
       - name: Commit the update
-        run: git push
+        run: |
+          git add .
+          git commit --amend --no-edit
+          git push
