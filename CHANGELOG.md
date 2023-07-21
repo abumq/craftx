@@ -1,3 +1,7 @@
+## 3.1.0
+
+- Added helper `convertObjParamFn` to convert a sync function that takes object and return async function
+
 ## 3.0.2
 
 - Minor documentation update to make things clear

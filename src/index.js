@@ -1,8 +1,6 @@
-// Copyright (c) 2020-present Amrayn.com Developers
-// Copyright (c) 2020-present @abumusamq
+// Copyright (c) 2020-present @abumq (Majid Q.)
 //
-// https://github.com/amrayn/craftx
-// https://amrayn.com
+// https://github.com/abumq/craftx
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +15,7 @@
 // limitations under the License.
 
 const get = require('lodash.get');
-const { fn, exec, fnExport } = require('./fn');
+const { fn, exec, fnExport, convertObjParamFn } = require('./fn');
 const { json } = require('./json');
 
 // default export
@@ -27,6 +25,7 @@ module.exports = fn;
 module.exports.fn = fn;
 module.exports.fnExport = fnExport;
 module.exports.exec = exec;
+module.exports.convertObjParamFn = (theSyncFunc) => fn(async (obj, ...anythingElse) => theSyncFunc(await json(obj), ...anythingElse));
 
 // name exports from json
 module.exports.json = json;
