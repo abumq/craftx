@@ -25,7 +25,7 @@ module.exports = fn;
 module.exports.fn = fn;
 module.exports.fnExport = fnExport;
 module.exports.exec = exec;
-module.exports.convertObjParamFn = (theSyncFunc) => fn(async (obj, ...anythingElse) => theSyncFunc(await json(obj), ...anythingElse));
+module.exports.fnjson = (theSyncFunc) => fn(async (obj, ...anythingElse) => theSyncFunc(await json(obj), ...anythingElse));
 
 // name exports from json
 module.exports.json = json;

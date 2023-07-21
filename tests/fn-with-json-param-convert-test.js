@@ -15,7 +15,7 @@ describe('Test convertObjParamFn()', () => {
     })
 
     describe('When converted to async', () => {
-      const myfnAsync = craftx.convertObjParamFn(myfn);
+      const myfnAsync = craftx.fnjson(myfn);
 
       it('Returns same result without promises', async () => {
         assert.equal(await myfnAsync({ p1: 'abumq', p2: 'Majid Q.' }), 'result => abumq & Majid Q.');
