@@ -36,5 +36,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - run: date >> examples/test-commit
-      - run: git commit -m 'auto commit (testing actions)'
+      - run: git commit -a -m 'auto commit (testing actions)'
       - run: git push
