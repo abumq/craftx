@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.1.4
 - No change to API
 
 ## 3.1.0
